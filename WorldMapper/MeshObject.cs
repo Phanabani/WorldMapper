@@ -8,8 +8,9 @@ namespace WorldMapper
     {
         protected float[] Vertices, Colors;
 
+        public int VertexCount => Vertices.Length;
         public VertexBufferArray BufferArray { get; private set; }
-        public Matrix4x4 Transform { get; private set; }
+        public Matrix4x4 Transform { get; set; }
 
         public MeshObject()
         {

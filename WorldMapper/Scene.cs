@@ -26,7 +26,14 @@ namespace WorldMapper
 
         public Scene()
         {
-            objects = new IRenderable[] {new TerrainObject()};
+            objects = new IRenderable[]
+            {
+                new TerrainObject(),
+                new TerrainObject
+                {
+                    Transform = Matrix4x4.CreateTranslation(-2, 0, 0)
+                },
+            };
         }
 
         /// <summary>
@@ -58,6 +65,7 @@ namespace WorldMapper
             //  Create a view matrix to move us back a bit.
             viewMatrix = Matrix4x4.CreateTranslation(0, 0, -5);
 
+            // Let each object set up its data
             foreach (var obj in objects)
             {
                 obj.BindData(gl);
@@ -70,31 +78,23 @@ namespace WorldMapper
         /// <param name="gl">The OpenGL instance.</param>
         public void Draw(OpenGL gl)
         {
-            //  Clear the scene.
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT | OpenGL.GL_STENCIL_BUFFER_BIT);
 
-            //  Bind the shader, set the matrices.
             shaderProgram.Bind(gl);
 
+            // Set unchanging matrix transformations
             shaderProgram.SetUniformMatrix4(gl, "projectionMatrix", MatrixToArray(projectionMatrix));
             shaderProgram.SetUniformMatrix4(gl, "viewMatrix", MatrixToArray(viewMatrix));
 
-            //  Bind the out vertex array.
-            foreach (IRenderable obj in objects)
+            // Draw each object
+            foreach (var obj in objects)
             {
-                // Can I change the model matrix? does uniform mean global?
                 shaderProgram.SetUniformMatrix4(gl, "modelMatrix", MatrixToArray(obj.Transform));
                 obj.BufferArray.Bind(gl);
-            }
-
-            //  Draw the square.
-            gl.DrawArrays(OpenGL.GL_TRIANGLES, 0, 6);
-
-            //  Unbind our vertex array and shader.
-            foreach (IRenderable obj in objects)
-            {
+                gl.DrawArrays(OpenGL.GL_TRIANGLES, 0, obj.VertexCount);
                 obj.BufferArray.Unbind(gl);
             }
+
             shaderProgram.Unbind(gl);
         }
     }
