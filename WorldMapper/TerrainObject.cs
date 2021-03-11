@@ -2,11 +2,16 @@
 
 namespace WorldMapper
 {
-    public class TerrainObject : IRenderable
+    public class TerrainObject : MeshObject
     {
-        public void Draw(OpenGL gl)
+        public TerrainObject()
         {
-            throw new System.NotImplementedException();
+            Vertices = new[]
+            {
+                0f, 0f, 0f,
+                1f, 0f, 0f,
+                1f, 1f, 0f
+            };
         }
     }
 }

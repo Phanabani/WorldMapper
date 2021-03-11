@@ -5,7 +5,7 @@
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
         <ProjectGuid>{A6846E3D-A731-426B-BE8B-9E043C38957B}</ProjectGuid>
-        <OutputType>WinExe</OutputType>
+        <OutputType>Exe</OutputType>
         <RootNamespace>WorldMapper</RootNamespace>
         <AssemblyName>WorldMapper</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
@@ -77,6 +77,7 @@
         </ApplicationDefinition>
         <Compile Include="IRenderable.cs" />
         <Compile Include="ManifestResourceLoader.cs" />
+        <Compile Include="MeshObject.cs" />
         <Compile Include="Scene.cs" />
         <Compile Include="TerrainObject.cs" />
         <Compile Include="Utils.cs" />
@@ -113,8 +114,8 @@
         <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="Shader.frag" />
-      <Content Include="Shader.vert" />
+      <EmbeddedResource Include="Shader.frag" />
+      <EmbeddedResource Include="Shader.vert" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

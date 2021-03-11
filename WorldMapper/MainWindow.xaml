@@ -9,9 +9,10 @@
         Title="MainWindow" Width="1280" Height="720">
     <Grid>
         <sharpGL:OpenGLControl
-            OpenGLDraw="OpenGLControl_OnOpenGLDraw"
             OpenGLInitialized="OpenGLControl_OnOpenGLInitialized"
+            OpenGLDraw="OpenGLControl_OnOpenGLDraw"
             FrameRate="60"
+            RenderContextType="FBO"
             DrawFPS="True" />
     </Grid>
 </Window>

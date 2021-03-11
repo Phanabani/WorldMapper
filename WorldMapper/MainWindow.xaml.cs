@@ -12,8 +12,8 @@ namespace WorldMapper
 
         public MainWindow()
         {
-            _scene = new Scene();
             InitializeComponent();
+            _scene = new Scene();
         }
 
         private void OpenGLControl_OnOpenGLInitialized(object sender, OpenGLRoutedEventArgs args)
