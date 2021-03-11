@@ -23,6 +23,10 @@ namespace WorldMapper
         private long _lastTime;
         private float _deltaTime;
 
+        private const float PI = (float)Math.PI;
+        private readonly float _distance = 5;
+        private float _rotation;
+
         public Scene()
         {
             _objects = new IRenderable[]
@@ -71,9 +75,6 @@ namespace WorldMapper
                 rads, width/height, 0.1f, 100f
             );
 
-            //  Create a view matrix to move us back a bit.
-            _viewMatrix = Matrix4x4.CreateTranslation(0, 0, -5);
-
             // Let each object set up its data
             foreach (var obj in _objects)
             {
@@ -92,8 +93,9 @@ namespace WorldMapper
 
             _shaderProgram.Bind(gl);
 
-            // Set unchanging matrix transformations
             _shaderProgram.SetUniformMatrix4(gl, "projectionMatrix", MatrixToArray(_projectionMatrix));
+
+            TransformViewMatrix();
             _shaderProgram.SetUniformMatrix4(gl, "viewMatrix", MatrixToArray(_viewMatrix));
 
             // Draw each object
@@ -106,6 +108,13 @@ namespace WorldMapper
             }
 
             _shaderProgram.Unbind(gl);
+        }
+
+        private void TransformViewMatrix()
+        {
+            _rotation += _deltaTime * PI;
+            _viewMatrix = Matrix4x4.CreateFromYawPitchRoll(_rotation, 0f, 0f)
+                * Matrix4x4.CreateTranslation(0f, 0f, -_distance);
         }
     }
 }
