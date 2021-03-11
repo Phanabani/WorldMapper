@@ -75,6 +75,11 @@
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
         </ApplicationDefinition>
+        <Compile Include="IRenderable.cs" />
+        <Compile Include="ManifestResourceLoader.cs" />
+        <Compile Include="Scene.cs" />
+        <Compile Include="TerrainObject.cs" />
+        <Compile Include="Utils.cs" />
         <Page Include="MainWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
@@ -106,6 +111,10 @@
     <ItemGroup>
         <None Include="App.config" />
         <None Include="packages.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="Shader.frag" />
+      <Content Include="Shader.vert" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
