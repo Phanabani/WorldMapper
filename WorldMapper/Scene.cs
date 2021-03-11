@@ -12,21 +12,20 @@ namespace WorldMapper
     /// </summary>
     public class Scene
     {
-        Matrix4x4 projectionMatrix;
-        Matrix4x4 viewMatrix;
+        private Matrix4x4 _projectionMatrix;
+        private Matrix4x4 _viewMatrix;
 
-        //  Constants that specify the attribute indexes.
-        const uint attributeIndexPosition = 0;
-        const uint attributeIndexColor = 1;
+        private ShaderProgram _shaderProgram;
+        private const uint AttributeIndexPosition = 0;
+        private const uint AttributeIndexColor = 1;
 
-        //  The shader program for our vertex and fragment shader.
-        private ShaderProgram shaderProgram;
-
-        private IRenderable[] objects;
+        private IRenderable[] _objects;
+        private long _lastTime;
+        private float _deltaTime;
 
         public Scene()
         {
-            objects = new IRenderable[]
+            _objects = new IRenderable[]
             {
                 new TerrainObject(),
                 new TerrainObject
@@ -34,6 +33,16 @@ namespace WorldMapper
                     Transform = Matrix4x4.CreateTranslation(-2, 0, 0)
                 },
             };
+        }
+
+        private void SampleTime()
+        {
+            var now = DateTime.UtcNow;
+            long nowTicks = now.Ticks;
+            if (_lastTime != 0)
+                // Ticks equal 100ns AKA 10,000,000ths of a second
+                _deltaTime = (nowTicks - _lastTime) / 10_000_000f;
+            _lastTime = nowTicks;
         }
 
         /// <summary>
@@ -50,23 +59,23 @@ namespace WorldMapper
             //  Create the shader program.
             var vertexShaderSource = ManifestResourceLoader.LoadTextFile("Shader.vert");
             var fragmentShaderSource = ManifestResourceLoader.LoadTextFile("Shader.frag");
-            shaderProgram = new ShaderProgram();
-            shaderProgram.Create(gl, vertexShaderSource, fragmentShaderSource, null);
-            shaderProgram.BindAttributeLocation(gl, attributeIndexPosition, "in_Position");
-            shaderProgram.BindAttributeLocation(gl, attributeIndexColor, "in_Color");
-            shaderProgram.AssertValid(gl);
+            _shaderProgram = new ShaderProgram();
+            _shaderProgram.Create(gl, vertexShaderSource, fragmentShaderSource, null);
+            _shaderProgram.BindAttributeLocation(gl, AttributeIndexPosition, "in_Position");
+            _shaderProgram.BindAttributeLocation(gl, AttributeIndexColor, "in_Color");
+            _shaderProgram.AssertValid(gl);
 
             //  Create a perspective projection matrix.
             const float rads = (60f / 180f) * (float)Math.PI;
-            projectionMatrix = Matrix4x4.CreatePerspectiveFieldOfView(
+            _projectionMatrix = Matrix4x4.CreatePerspectiveFieldOfView(
                 rads, width/height, 0.1f, 100f
             );
 
             //  Create a view matrix to move us back a bit.
-            viewMatrix = Matrix4x4.CreateTranslation(0, 0, -5);
+            _viewMatrix = Matrix4x4.CreateTranslation(0, 0, -5);
 
             // Let each object set up its data
-            foreach (var obj in objects)
+            foreach (var obj in _objects)
             {
                 obj.BindData(gl);
             }
@@ -78,24 +87,25 @@ namespace WorldMapper
         /// <param name="gl">The OpenGL instance.</param>
         public void Draw(OpenGL gl)
         {
+            SampleTime();
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT | OpenGL.GL_STENCIL_BUFFER_BIT);
 
-            shaderProgram.Bind(gl);
+            _shaderProgram.Bind(gl);
 
             // Set unchanging matrix transformations
-            shaderProgram.SetUniformMatrix4(gl, "projectionMatrix", MatrixToArray(projectionMatrix));
-            shaderProgram.SetUniformMatrix4(gl, "viewMatrix", MatrixToArray(viewMatrix));
+            _shaderProgram.SetUniformMatrix4(gl, "projectionMatrix", MatrixToArray(_projectionMatrix));
+            _shaderProgram.SetUniformMatrix4(gl, "viewMatrix", MatrixToArray(_viewMatrix));
 
             // Draw each object
-            foreach (var obj in objects)
+            foreach (var obj in _objects)
             {
-                shaderProgram.SetUniformMatrix4(gl, "modelMatrix", MatrixToArray(obj.Transform));
+                _shaderProgram.SetUniformMatrix4(gl, "modelMatrix", MatrixToArray(obj.Transform));
                 obj.BufferArray.Bind(gl);
                 gl.DrawArrays(OpenGL.GL_TRIANGLES, 0, obj.VertexCount);
                 obj.BufferArray.Unbind(gl);
             }
 
-            shaderProgram.Unbind(gl);
+            _shaderProgram.Unbind(gl);
         }
     }
 }
