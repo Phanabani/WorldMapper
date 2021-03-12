@@ -57,9 +57,6 @@ namespace WorldMapper
         /// <param name="height">The height of the screen.</param>
         public void Initialize(OpenGL gl, float width, float height)
         {
-            //  Set a blue clear colour.
-            gl.ClearColor(0.4f, 0.6f, 0.9f, 0.0f);
-
             //  Create the shader program.
             var vertexShaderSource = ManifestResourceLoader.LoadTextFile("Shader.vert");
             var fragmentShaderSource = ManifestResourceLoader.LoadTextFile("Shader.frag");

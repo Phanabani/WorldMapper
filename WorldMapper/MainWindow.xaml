@@ -6,13 +6,19 @@
         xmlns:local="clr-namespace:WorldMapper"
         xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
         mc:Ignorable="d"
+        Loaded="MainWindow_OnLoaded"
+        AllowsTransparency="True" WindowStyle="None"
         Title="MainWindow" Width="1280" Height="720">
-    <Grid>
-        <sharpGL:OpenGLControl
-            OpenGLInitialized="OpenGLControl_OnOpenGLInitialized"
-            OpenGLDraw="OpenGLControl_OnOpenGLDraw"
-            FrameRate="60"
-            RenderContextType="FBO"
-            DrawFPS="True" />
+    <Window.Background>
+        <SolidColorBrush Opacity="0.5" Color="White"/>
+    </Window.Background>
+    <Grid Name="myGrid">
+        <!-- <sharpGL:OpenGLControl -->
+        <!--     Name="myglctrl" -->
+        <!--     OpenGLInitialized="OpenGLControl_OnOpenGLInitialized" -->
+        <!--     OpenGLDraw="OpenGLControl_OnOpenGLDraw" -->
+        <!--     FrameRate="60" -->
+        <!--     RenderContextType="NativeWindow" -->
+        <!--     DrawFPS="True" /> -->
     </Grid>
 </Window>
