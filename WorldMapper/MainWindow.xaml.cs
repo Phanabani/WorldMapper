@@ -1,7 +1,5 @@
-﻿using System.Net.Configuration;
-using System.Windows;
+﻿using System.Windows;
 using SharpGL;
-using SharpGL.Version;
 using SharpGL.WPF;
 
 namespace WorldMapper
@@ -12,10 +10,10 @@ namespace WorldMapper
     public partial class MainWindow
     {
         private readonly Scene _scene;
-        private OverlayWindowRenderContextProvider overlayRCP;
 
         public MainWindow()
         {
+            OpenGLTransparencyPatcher.DoPatching();
             InitializeComponent();
             _scene = new Scene();
         }
@@ -28,9 +26,6 @@ namespace WorldMapper
         private void OpenGLControl_OnOpenGLInitialized(object sender, OpenGLRoutedEventArgs args)
         {
             var gl = args.OpenGL;
-            // overlayRCP = OverlayWindowRenderContextProvider.CustomCreate(
-            //     gl, OpenGLVersion.OpenGL2_1, (int)Width, (int)Height
-            // );
 
             gl.Enable(OpenGL.GL_ALPHA_TEST);
             gl.Enable(OpenGL.GL_DEPTH_TEST);

@@ -12,13 +12,11 @@
     <Window.Background>
         <SolidColorBrush Opacity="0.0" Color="White"/>
     </Window.Background>
-    <Grid Name="myGrid">
-        <local:OpenGLOverlayControl
-            x:Name="myglctrl"
+    <Grid>
+        <sharpGL:OpenGLControl
             OpenGLInitialized="OpenGLControl_OnOpenGLInitialized"
             OpenGLDraw="OpenGLControl_OnOpenGLDraw"
             RenderContextType="FBO"
-            FrameRate="60"
-            DrawFPS="True" />
+            FrameRate="60" />
     </Grid>
 </Window>
