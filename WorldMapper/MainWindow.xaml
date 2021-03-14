@@ -10,15 +10,15 @@
         AllowsTransparency="True" WindowStyle="None"
         Title="MainWindow" Width="1280" Height="720">
     <Window.Background>
-        <SolidColorBrush Opacity="0.2" Color="White"/>
+        <SolidColorBrush Opacity="0.0" Color="White"/>
     </Window.Background>
     <Grid Name="myGrid">
-        <sharpGL:OpenGLControl
-            Name="myglctrl"
+        <local:OpenGLOverlayControl
+            x:Name="myglctrl"
             OpenGLInitialized="OpenGLControl_OnOpenGLInitialized"
             OpenGLDraw="OpenGLControl_OnOpenGLDraw"
-            FrameRate="60"
             RenderContextType="FBO"
+            FrameRate="60"
             DrawFPS="True" />
     </Grid>
 </Window>

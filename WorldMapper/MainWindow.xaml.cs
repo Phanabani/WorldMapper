@@ -27,11 +27,10 @@ namespace WorldMapper
 
         private void OpenGLControl_OnOpenGLInitialized(object sender, OpenGLRoutedEventArgs args)
         {
-            ((OpenGLControl) sender).RenderContextType = RenderContextType.NativeWindow;
             var gl = args.OpenGL;
-            overlayRCP = OverlayWindowRenderContextProvider.CustomCreate(
-                gl, OpenGLVersion.OpenGL2_1, (int)Width, (int)Height
-            );
+            // overlayRCP = OverlayWindowRenderContextProvider.CustomCreate(
+            //     gl, OpenGLVersion.OpenGL2_1, (int)Width, (int)Height
+            // );
 
             gl.Enable(OpenGL.GL_ALPHA_TEST);
             gl.Enable(OpenGL.GL_DEPTH_TEST);
@@ -48,11 +47,7 @@ namespace WorldMapper
 
         private void OpenGLControl_OnOpenGLDraw(object sender, OpenGLRoutedEventArgs args)
         {
-            var hdc = Win32.GetDC(overlayRCP.WindowHandle);
-            Win32.wglMakeCurrent(hdc, overlayRCP.RenderContextHandle);
             _scene.Draw(args.OpenGL);
-            Win32.SwapBuffers(hdc);
-            Win32.ReleaseDC(overlayRCP.WindowHandle, hdc);
         }
     }
 }
