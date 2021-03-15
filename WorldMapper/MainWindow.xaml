@@ -7,8 +7,12 @@
         xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
         mc:Ignorable="d"
         Loaded="MainWindow_OnLoaded"
-        AllowsTransparency="True" WindowStyle="None"
-        Title="MainWindow" Width="1280" Height="720">
+        SourceInitialized="MainWindow_OnSourceInitialized"
+        Topmost="True"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        WindowState="Maximized"
+        Title="MainWindow" Width="1920" Height="1080">
     <Window.Background>
         <SolidColorBrush Opacity="0.0" Color="White"/>
     </Window.Background>

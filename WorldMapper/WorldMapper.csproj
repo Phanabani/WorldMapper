@@ -86,6 +86,7 @@
         <Compile Include="Scene.cs" />
         <Compile Include="TerrainObject.cs" />
         <Compile Include="Utils.cs" />
+        <Compile Include="WindowsServices.cs" />
         <Page Include="MainWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>

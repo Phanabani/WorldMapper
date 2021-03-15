@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using SharpGL;
 using SharpGL.WPF;
 
@@ -16,6 +17,11 @@ namespace WorldMapper
             OpenGLTransparencyPatcher.DoPatching();
             InitializeComponent();
             _scene = new Scene();
+        }
+
+        private void MainWindow_OnSourceInitialized(object sender, EventArgs e)
+        {
+            WindowsServices.SetWindowExTransparent(this);
         }
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
