@@ -17,15 +17,18 @@ namespace WorldMapper
         public static string LoadTextFile(string textFileName)
         {
             var executingAssembly = Assembly.GetExecutingAssembly();
-            var pathToDots = textFileName.Replace("\\", ".");
+            var pathToDots = textFileName.Replace("/", ".");
             var location = $"{executingAssembly.GetName().Name}.{pathToDots}";
 
             using (var stream = executingAssembly.GetManifestResourceStream(location))
             {
+                if (stream is null)
+                    throw new FileNotFoundException(
+                        $"Unable to find resource {location}"
+                    );
+
                 using (var reader = new StreamReader(stream))
-                {
                     return reader.ReadToEnd();
-                }
             }
         }
     }
