@@ -84,6 +84,7 @@
         <Compile Include="MeshObjectBase.cs" />
         <Compile Include="OpenGLTransparencyPatcher.cs" />
         <Compile Include="Scene.cs" />
+        <Compile Include="Shaders\ShaderBase.cs" />
         <Compile Include="TerrainObject.cs" />
         <Compile Include="Utils.cs" />
         <Compile Include="WindowsServices.cs" />
