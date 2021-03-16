@@ -1,6 +1,6 @@
-﻿using System.Numerics;
-using SharpGL;
+﻿using SharpGL;
 using SharpGL.VertexBuffers;
+using WorldMapper.WorldMath;
 
 namespace WorldMapper
 {
@@ -10,13 +10,13 @@ namespace WorldMapper
 
         public int VertexCount => Vertices.Length;
         public VertexBufferArray BufferArray { get; private set; }
-        public Matrix4x4 Transform { get; set; }
+        public Transform Transform { get; set; }
 
         protected VertexBuffer VertexDataBuffer;
 
         public MeshObjectBase()
         {
-            Transform = Matrix4x4.Identity;
+            Transform = new Transform();
         }
 
         public void CreateBuffers(OpenGL gl)
