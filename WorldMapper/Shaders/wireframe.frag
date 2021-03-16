@@ -1,25 +1,25 @@
-﻿#version 330 core
+#version 330 core
 // Source: https://github.com/mattdesl/webgl-wireframes
 
 in vec3 vBarycentric;
 out vec4 out_Color;
 
-uniform vec3 stroke;
-uniform vec3 fill;
+uniform vec4 fill;
+uniform vec4 stroke;
+uniform bool differentBackfaceColor;
+uniform vec4 fillBackface;
+uniform vec4 strokeBackface;
 
-uniform float time;
 uniform float thickness;
+uniform bool dualStroke;
 uniform float secondThickness;
 
+uniform float time;
 uniform bool dashed;
 uniform float dashCount;
 uniform float dashLength;
 uniform bool dashOverlap;
 uniform bool dashAnimate;
-
-uniform bool seeThrough;
-uniform bool insideAltColor;
-uniform bool dualStroke;
 
 uniform bool squeeze;
 uniform float squeezeMin;
@@ -85,21 +85,21 @@ vec4 getStyledWireframe(vec3 barycentric) {
 
     // now compute the final color of the mesh
     vec4 outColor = vec4(0.0);
-    if (seeThrough) {
-        outColor = vec4(stroke, edge);
-        if (insideAltColor && !gl_FrontFacing) {
-            outColor.rgb = fill;
-        }
+    vec4 computedFill = vec4(0.0);
+    vec4 computedStroke = vec4(0.0);
+    if (gl_FrontFacing || !differentBackfaceColor) {
+        computedFill = fill;
+        computedStroke = stroke;
     } else {
-        vec3 mainStroke = mix(fill, stroke, edge);
-        outColor.a = 1.0;
-        if (dualStroke) {
-            float inner = 1.0 - aastep(secondThickness, d);
-            vec3 wireColor = mix(fill, stroke, abs(inner - edge));
-            outColor.rgb = wireColor;
-        } else {
-            outColor.rgb = mainStroke;
-        }
+        computedFill = fillBackface;
+        computedStroke = strokeBackface;
+    }
+
+    if (dualStroke) {
+        float inner = 1.0 - aastep(secondThickness, d);
+        outColor = mix(computedFill, computedStroke, abs(inner - edge));
+    } else {
+        outColor = mix(computedFill, computedStroke, edge);
     }
 
     return outColor;

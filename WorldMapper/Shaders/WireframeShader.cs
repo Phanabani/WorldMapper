@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using SharpGL;
+﻿using SharpGL;
 
 namespace WorldMapper.Shaders
 {
@@ -28,16 +27,15 @@ namespace WorldMapper.Shaders
         {
             SetFill(gl);
             SetStroke(gl);
-
-            SetTime(gl);
+            SetDifferentBackfaceColor(gl);
+            SetFillBackface(gl);
+            SetStrokeBackface(gl);
 
             SetThickness(gl);
+            SetDualStroke(gl);
             SetSecondThickness(gl);
 
-            SetDualStroke(gl);
-            SetSeeThrough(gl);
-            SetInsideAltColor(gl);
-
+            SetTime(gl);
             SetDashed(gl);
             SetDashCount(gl);
             SetDashLength(gl);
@@ -49,38 +47,45 @@ namespace WorldMapper.Shaders
             SetSqueezeMax(gl);
         }
 
-        public void SetFill(OpenGL gl, float r = 0.5f, float g = 0.5f, float b = 0.5f)
+        public void SetFill(OpenGL gl, float r = 1f, float g = 1f, float b = 1f, float a = 0f)
         {
-            gl.Uniform3(Shader.GetUniformLocation(gl, "fill"), r, g, b);
+            gl.Uniform4(Shader.GetUniformLocation(gl, "fill"), r, g, b, a);
         }
 
-        public void SetStroke(OpenGL gl, float r = 0.5f, float g = 0.5f, float b = 0.5f)
+        public void SetStroke(OpenGL gl, float r = 1f, float g = 1f, float b = 1f, float a = 1f)
         {
-            gl.Uniform3(Shader.GetUniformLocation(gl, "stroke"), r, g, b);
+            gl.Uniform4(Shader.GetUniformLocation(gl, "stroke"), r, g, b, a);
         }
 
-        public void SetTime(OpenGL gl, float time = 0f) {
-            gl.Uniform1(Shader.GetUniformLocation(gl, "time"), time);
+        public void SetDifferentBackfaceColor(OpenGL gl, bool enabled = false)
+        {
+            gl.Uniform1(Shader.GetUniformLocation(gl, "differentBackfaceColor"), enabled ? 1 : 0);
+        }
+
+        public void SetFillBackface(OpenGL gl, float r = 1f, float g = 1f, float b = 1f, float a = 0f)
+        {
+            gl.Uniform4(Shader.GetUniformLocation(gl, "fillBackface"), r, g, b, a);
+        }
+
+        public void SetStrokeBackface(OpenGL gl, float r = 1f, float g = 1f, float b = 1f, float a = 1f)
+        {
+            gl.Uniform4(Shader.GetUniformLocation(gl, "strokeBackface"), r, g, b, a);
         }
 
         public void SetThickness(OpenGL gl, float thickness = 0.02f) {
             gl.Uniform1(Shader.GetUniformLocation(gl, "thickness"), thickness);
         }
 
-        public void SetSecondThickness(OpenGL gl, float thickness = 0.05f) {
-            gl.Uniform1(Shader.GetUniformLocation(gl, "secondThickness"), thickness);
-        }
-
         public void SetDualStroke(OpenGL gl, bool enabled = false) {
             gl.Uniform1(Shader.GetUniformLocation(gl, "dualStroke"), enabled ? 1 : 0);
         }
 
-        public void SetSeeThrough(OpenGL gl, bool enabled = true) {
-            gl.Uniform1(Shader.GetUniformLocation(gl, "seeThrough"), enabled ? 1 : 0);
+        public void SetSecondThickness(OpenGL gl, float thickness = 0.05f) {
+            gl.Uniform1(Shader.GetUniformLocation(gl, "secondThickness"), thickness);
         }
 
-        public void SetInsideAltColor(OpenGL gl, bool enabled = false) {
-            gl.Uniform1(Shader.GetUniformLocation(gl, "insideAltColor"), enabled ? 1 : 0);
+        public void SetTime(OpenGL gl, float time = 0f) {
+            gl.Uniform1(Shader.GetUniformLocation(gl, "time"), time);
         }
 
         public void SetDashed(OpenGL gl, bool enabled = false) {

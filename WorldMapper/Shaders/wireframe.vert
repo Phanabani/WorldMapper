@@ -1,4 +1,4 @@
-﻿#version 330 core
+#version 330 core
 
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
@@ -12,7 +12,7 @@ out vec3 vBarycentric;
 out vec3 vPosition;
 
 void main() {
-	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position.xyz, 1.0);
-	vBarycentric = barycentric;
-	vPosition = position.xyz;
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position.xyz, 1.0);
+    vBarycentric = barycentric;
+    vPosition = position.xyz;
 }
