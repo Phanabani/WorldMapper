@@ -10,6 +10,7 @@ uniform bool differentBackfaceColor;
 uniform vec4 fillBackface;
 uniform vec4 strokeBackface;
 
+uniform float fixedWidthMix;
 uniform float thickness;
 uniform bool dualStroke;
 uniform float secondThickness;
@@ -27,22 +28,21 @@ uniform float squeezeMax;
 
 const float PI = 3.14159265;
 
-// This is like
+// Provides anti-aliasing between stroke and fill
 float aastep(float threshold, float dist) {
     float afwidth = fwidth(dist) * 0.5;
     return smoothstep(threshold - afwidth, threshold + afwidth, dist);
 }
 
-// This function is not currently used, but it can be useful
-// to achieve a fixed width wireframe regardless of z-depth
+// Used to achieve a fixed width wireframe regardless of z-depth
 float computeScreenSpaceWireframe(vec3 barycentric, float lineWidth) {
     vec3 dist = fwidth(barycentric);
     vec3 smoothed = smoothstep(dist * ((lineWidth * 0.5) - 0.5), dist * ((lineWidth * 0.5) + 0.5), barycentric);
     return 1.0 - min(min(smoothed.x, smoothed.y), smoothed.z);
 }
 
-// This function returns the fragment color for our styled wireframe effect
-// based on the barycentric coordinates for this fragment
+// Returns the fragment color for our styled wireframe effect based on the
+// barycentric coordinates for this fragment
 vec4 getStyledWireframe(vec3 barycentric) {
     // this will be our signed distance for the wireframe edge
     float d = min(min(barycentric.x, barycentric.y), barycentric.z);
@@ -54,7 +54,17 @@ vec4 getStyledWireframe(vec3 barycentric) {
     }
 
     // the thickness of the stroke
-    float computedThickness = thickness;
+    float computedThickness;
+    if (fixedWidthMix <= 0.0) {
+        computedThickness = thickness;
+    } else if (fixedWidthMix >= 1.0) {
+        computedThickness = computeScreenSpaceWireframe(barycentric, thickness);
+    } else {
+        computedThickness = mix(
+            thickness, computeScreenSpaceWireframe(barycentric, thickness),
+            fixedWidthMix
+        );
+    }
 
     // if we want to shrink the thickness toward the center of the line segment
     if (squeeze) {

@@ -31,6 +31,7 @@ namespace WorldMapper.Shaders
             SetFillBackface(gl);
             SetStrokeBackface(gl);
 
+            SetFixedWidthMix(gl);
             SetThickness(gl);
             SetDualStroke(gl);
             SetSecondThickness(gl);
@@ -70,6 +71,17 @@ namespace WorldMapper.Shaders
         public void SetStrokeBackface(OpenGL gl, float r = 1f, float g = 1f, float b = 1f, float a = 1f)
         {
             gl.Uniform4(Shader.GetUniformLocation(gl, "strokeBackface"), r, g, b, a);
+        }
+
+        /// <summary>
+        /// Mix between dynamic (0.0) and fixed (1.0) width wireframes.
+        /// Be aware that thickness units are different between these two
+        /// systems: dynamic uses barycentric units where 1/3 is the maximum
+        /// thickness, whereas fixed uses (what looks like) screen-space pixel
+        /// units.
+        /// </summary>
+        public void SetFixedWidthMix(OpenGL gl, float mix = 0f) {
+            gl.Uniform1(Shader.GetUniformLocation(gl, "fixedWidthMix"), mix);
         }
 
         public void SetThickness(OpenGL gl, float thickness = 0.02f) {
