@@ -1,9 +1,7 @@
 ﻿using System;
 using SharpGL;
-using SharpGL.Shaders;
 using System.Numerics;
-
-using static WorldMapper.Utils;
+using WorldMapper.Shaders;
 
 namespace WorldMapper
 {
@@ -15,9 +13,7 @@ namespace WorldMapper
         private Matrix4x4 _projectionMatrix;
         private Matrix4x4 _viewMatrix;
 
-        private ShaderProgram _shaderProgram;
-        private const uint AttributeIndexPosition = 0;
-        private const uint AttributeIndexColor = 1;
+        private WireframeShader _shader;
 
         private IRenderable[] _objects;
         private long _lastTime;
@@ -26,9 +22,11 @@ namespace WorldMapper
         private const float PI = (float)Math.PI;
         private readonly float _distance = 5;
         private float _rotation;
+        private Matrix4x4 _transMat;
 
         public Scene()
         {
+            _transMat = Matrix4x4.CreateTranslation(0, 0, -_distance);
             _objects = new IRenderable[]
             {
                 new TerrainObject(),
@@ -58,13 +56,13 @@ namespace WorldMapper
         public void Initialize(OpenGL gl, float width, float height)
         {
             //  Create the shader program.
-            var vertexShaderSource = ManifestResourceLoader.LoadTextFile("Shader.vert");
-            var fragmentShaderSource = ManifestResourceLoader.LoadTextFile("Shader.frag");
-            _shaderProgram = new ShaderProgram();
-            _shaderProgram.Create(gl, vertexShaderSource, fragmentShaderSource, null);
-            _shaderProgram.BindAttributeLocation(gl, AttributeIndexPosition, "in_Position");
-            _shaderProgram.BindAttributeLocation(gl, AttributeIndexColor, "in_Color");
-            _shaderProgram.AssertValid(gl);
+            _shader = new WireframeShader(gl);
+            _shader.Bind(gl);
+            _shader.InitializeAllUniforms(gl);
+            _shader.SetFill(gl, 0.5f, 0, 0);
+            _shader.SetStroke(gl, 0, 1, 1);
+            _shader.SetThickness(gl, 0.04f);
+            _shader.Unbind(gl);
 
             //  Create a perspective projection matrix.
             const float rads = (60f / 180f) * (float)Math.PI;
@@ -75,7 +73,7 @@ namespace WorldMapper
             // Let each object set up its data
             foreach (var obj in _objects)
             {
-                obj.BindData(gl);
+                obj.CreateBuffers(gl);
             }
         }
 
@@ -88,30 +86,30 @@ namespace WorldMapper
             SampleTime();
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT | OpenGL.GL_STENCIL_BUFFER_BIT);
 
-            _shaderProgram.Bind(gl);
-
-            _shaderProgram.SetUniformMatrix4(gl, "projectionMatrix", MatrixToArray(_projectionMatrix));
+            _shader.Bind(gl);
 
             TransformViewMatrix();
-            _shaderProgram.SetUniformMatrix4(gl, "viewMatrix", MatrixToArray(_viewMatrix));
+            _shader.SetMatrix(gl, "projectionMatrix", _projectionMatrix);
+            _shader.SetMatrix(gl, "viewMatrix", _viewMatrix);
 
             // Draw each object
             foreach (var obj in _objects)
             {
-                _shaderProgram.SetUniformMatrix4(gl, "modelMatrix", MatrixToArray(obj.Transform));
+                _shader.SetMatrix(gl, "modelMatrix", obj.Transform);
                 obj.BufferArray.Bind(gl);
                 gl.DrawArrays(OpenGL.GL_TRIANGLES, 0, obj.VertexCount);
                 obj.BufferArray.Unbind(gl);
             }
 
-            _shaderProgram.Unbind(gl);
+            _shader.Unbind(gl);
         }
 
         private void TransformViewMatrix()
         {
-            _rotation += _deltaTime * PI;
+            _rotation += _deltaTime * PI / 4;
             _viewMatrix = Matrix4x4.CreateFromYawPitchRoll(_rotation, 0f, 0f)
-                * Matrix4x4.CreateTranslation(0f, 0f, -_distance);
+                * Matrix4x4.CreateFromYawPitchRoll(0f, _rotation/1.2f, 0f)
+                * _transMat;
         }
     }
 }

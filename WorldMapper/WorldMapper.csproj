@@ -85,6 +85,7 @@
         <Compile Include="OpenGLTransparencyPatcher.cs" />
         <Compile Include="Scene.cs" />
         <Compile Include="Shaders\ShaderBase.cs" />
+        <Compile Include="Shaders\WireframeShader.cs" />
         <Compile Include="TerrainObject.cs" />
         <Compile Include="Utils.cs" />
         <Compile Include="WindowsServices.cs" />
@@ -115,14 +116,12 @@
             <Generator>ResXFileCodeGenerator</Generator>
             <LastGenOutput>Resources.Designer.cs</LastGenOutput>
         </EmbeddedResource>
+        <EmbeddedResource Include="Shaders\wireframe.frag" />
+        <EmbeddedResource Include="Shaders\wireframe.vert" />
     </ItemGroup>
     <ItemGroup>
         <None Include="App.config" />
         <None Include="packages.config" />
-    </ItemGroup>
-    <ItemGroup>
-      <EmbeddedResource Include="Shader.frag" />
-      <EmbeddedResource Include="Shader.vert" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
