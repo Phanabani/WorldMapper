@@ -4,20 +4,22 @@ using SharpGL.VertexBuffers;
 
 namespace WorldMapper
 {
-    public class MeshObject : IRenderable
+    public abstract class MeshObjectBase : IRenderable
     {
-        protected float[] Vertices, Colors;
+        protected float[] Vertices;
 
         public int VertexCount => Vertices.Length;
         public VertexBufferArray BufferArray { get; private set; }
         public Matrix4x4 Transform { get; set; }
 
-        public MeshObject()
+        protected VertexBuffer VertexDataBuffer;
+
+        public MeshObjectBase()
         {
             Transform = Matrix4x4.Identity;
         }
 
-        public void BindData(OpenGL gl)
+        public void CreateBuffers(OpenGL gl)
         {
             //  Create the vertex array object.
             BufferArray = new VertexBufferArray();
@@ -25,18 +27,17 @@ namespace WorldMapper
             BufferArray.Bind(gl);
 
             //  Create a vertex buffer for the vertex data.
-            var vertexDataBuffer = new VertexBuffer();
-            vertexDataBuffer.Create(gl);
-            vertexDataBuffer.Bind(gl);
-            vertexDataBuffer.SetData(gl, 0, Vertices, false, 3);
+            VertexDataBuffer = new VertexBuffer();
+            VertexDataBuffer.Create(gl);
+            VertexDataBuffer.Bind(gl);
+            VertexDataBuffer.SetData(gl, 0, Vertices, false, 3);
 
-            // var colorDataBuffer = new VertexBuffer();
-            // colorDataBuffer.Create(gl);
-            // colorDataBuffer.Bind(gl);
-            // colorDataBuffer.SetData(gl, 1, Colors, false, 3);
+            CreateCustomBuffers(gl);
 
             //  Unbind the vertex array, we've finished specifying data for it.
             BufferArray.Unbind(gl);
         }
+
+        protected virtual void CreateCustomBuffers(OpenGL gl) { }
     }
 }

@@ -9,6 +9,6 @@ namespace WorldMapper
         VertexBufferArray BufferArray { get; }
         int VertexCount { get; }
         Matrix4x4 Transform { get; set; }
-        void BindData(OpenGL gl);
+        void CreateBuffers(OpenGL gl);
     }
 }
