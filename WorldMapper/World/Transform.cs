@@ -33,21 +33,26 @@ namespace WorldMapper.World
         private Vector3 _scale = Vector3.One;
         private Matrix4x4 _matrix = Matrix4x4.Identity;
 
-        private bool _positionDirty;
-        private bool _rotationDirty;
-        private bool _scaleDirty;
+        private bool _dirty;
 
-        private Matrix4x4 GetMatrix()
+        /// <summary>
+        /// Modifying a property of one of the vector/quaternion properties
+        /// will not mark it as dirty, so the matrix will not be updated.
+        /// This method will force it to update.
+        /// </summary>
+        public Matrix4x4 ForceUpdateMatrix()
         {
-            if (!_positionDirty && !_rotationDirty && !_scaleDirty)
-                return _matrix;
-
             var trans = Matrix4x4.CreateTranslation(_position);
             var rot = Matrix4x4.CreateFromQuaternion(_rotation);
             var scale = Matrix4x4.CreateScale(_scale);
             _matrix = trans * rot * scale;
-            _positionDirty = _rotationDirty = _scaleDirty = false;
+            _dirty = false;
             return _matrix;
+        }
+
+        private Matrix4x4 GetMatrix()
+        {
+            return _dirty ? ForceUpdateMatrix() : _matrix;
         }
 
         private bool SetMatrix(Matrix4x4 matrix)
@@ -61,7 +66,7 @@ namespace WorldMapper.World
             if (position == _position)
                 return;
             _position = position;
-            _positionDirty = true;
+            _dirty = true;
         }
 
         public void SetRotation(Quaternion rotation)
@@ -69,7 +74,7 @@ namespace WorldMapper.World
             if (rotation == _rotation)
                 return;
             _rotation = rotation;
-            _rotationDirty = true;
+            _dirty = true;
         }
 
         public void SetScale(Vector3 scale)
@@ -77,7 +82,7 @@ namespace WorldMapper.World
             if (scale == _scale)
                 return;
             _scale = scale;
-            _scaleDirty = true;
+            _dirty = true;
         }
     }
 }
