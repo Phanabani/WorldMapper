@@ -27,9 +27,24 @@ namespace WorldMapper.Shaders
         public void Bind(OpenGL gl) => Shader.Bind(gl);
         public void Unbind(OpenGL gl) => Shader.Unbind(gl);
 
-        public void SetMatrix(OpenGL gl, string uniformName, Matrix4x4 mat)
+        protected void SetMatrix(OpenGL gl, string name, Matrix4x4 mat)
         {
-            Shader.SetUniformMatrix4(gl, uniformName, MatrixToArray(mat));
+            Shader.SetUniformMatrix4(gl, name, MatrixToArray(mat));
+        }
+
+        public void SetProjection(OpenGL gl, Matrix4x4 mat)
+        {
+            SetMatrix(gl, "projectionMatrix", mat);
+        }
+
+        public void SetView(OpenGL gl, Matrix4x4 mat)
+        {
+            SetMatrix(gl, "viewMatrix", mat);
+        }
+
+        public void SetModel(OpenGL gl, Matrix4x4 mat)
+        {
+            SetMatrix(gl, "modelMatrix", mat);
         }
     }
 }
