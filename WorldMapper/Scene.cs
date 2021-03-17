@@ -2,7 +2,7 @@
 using SharpGL;
 using System.Numerics;
 using WorldMapper.Shaders;
-using WorldMapper.WorldMath;
+using WorldMapper.World;
 
 namespace WorldMapper
 {

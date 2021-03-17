@@ -1,8 +1,7 @@
 ﻿using SharpGL;
 using SharpGL.VertexBuffers;
-using WorldMapper.WorldMath;
 
-namespace WorldMapper
+namespace WorldMapper.World
 {
     public interface IRenderable
     {

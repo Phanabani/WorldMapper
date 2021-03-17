@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace WorldMapper.WorldMath
+namespace WorldMapper.World
 {
     public class Utils
     {

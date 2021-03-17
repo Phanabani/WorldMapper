@@ -3,7 +3,7 @@ using SharpGL;
 using SharpGL.VertexBuffers;
 using WorldMapper.Shaders;
 
-namespace WorldMapper
+namespace WorldMapper.World
 {
     public class TerrainObject : MeshObjectBase
     {
