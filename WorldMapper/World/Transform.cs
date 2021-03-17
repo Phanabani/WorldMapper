@@ -34,6 +34,12 @@ namespace WorldMapper.World
         private Matrix4x4 _matrix = Matrix4x4.Identity;
 
         private bool _dirty;
+        private bool _isCamera;
+
+        public Transform(bool isCamera = false)
+        {
+            _isCamera = isCamera;
+        }
 
         /// <summary>
         /// Modifying a property of one of the vector/quaternion properties
@@ -42,7 +48,11 @@ namespace WorldMapper.World
         /// </summary>
         public Matrix4x4 ForceUpdateMatrix()
         {
-            var trans = Matrix4x4.CreateTranslation(_position);
+            Matrix4x4 trans;
+            if (_isCamera)
+                trans = Matrix4x4.CreateTranslation(-_position);
+            else
+                trans = Matrix4x4.CreateTranslation(_position);
             var rot = Matrix4x4.CreateFromQuaternion(_rotation);
             var scale = Matrix4x4.CreateScale(_scale);
             _matrix = trans * rot * scale;
