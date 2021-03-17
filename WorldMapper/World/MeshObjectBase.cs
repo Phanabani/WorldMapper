@@ -1,5 +1,8 @@
-﻿using SharpGL;
+﻿using System;
+using System.Numerics;
+using SharpGL;
 using SharpGL.VertexBuffers;
+using WorldMapper.Shaders;
 
 namespace WorldMapper.World
 {
@@ -9,34 +12,47 @@ namespace WorldMapper.World
 
         public int VertexCount => Vertices.Length;
         public VertexBufferArray BufferArray { get; private set; }
-        public Transform Transform { get; set; }
+        public Transform Transform { get; set; } = new Transform();
+        public ShaderBase Shader { get; set; }
 
         protected VertexBuffer VertexDataBuffer;
 
-        public MeshObjectBase()
-        {
-            Transform = new Transform();
-        }
-
         public void CreateBuffers(OpenGL gl)
         {
-            //  Create the vertex array object.
             BufferArray = new VertexBufferArray();
             BufferArray.Create(gl);
             BufferArray.Bind(gl);
 
-            //  Create a vertex buffer for the vertex data.
             VertexDataBuffer = new VertexBuffer();
             VertexDataBuffer.Create(gl);
             VertexDataBuffer.Bind(gl);
             VertexDataBuffer.SetData(gl, 0, Vertices, false, 3);
+            VertexDataBuffer.Unbind(gl);
 
-            CreateCustomBuffers(gl);
-
-            //  Unbind the vertex array, we've finished specifying data for it.
             BufferArray.Unbind(gl);
         }
 
-        protected virtual void CreateCustomBuffers(OpenGL gl) { }
+        public void Draw(OpenGL gl, Matrix4x4 projection, Matrix4x4 view)
+        {
+            if (Shader is null)
+                throw new InvalidOperationException("Missing shader");
+
+            Shader.Bind(gl);
+
+            SetShaderUniforms(gl);
+            // NOTE this could be optimized perhaps by iterating through each
+            // unique shader and only setting them when necessary
+            Shader.SetProjection(gl, projection);
+            Shader.SetView(gl, view);
+            Shader.SetModel(gl, Transform.Matrix);
+
+            BufferArray.Bind(gl);
+            gl.DrawArrays(OpenGL.GL_TRIANGLES, 0, VertexCount);
+            BufferArray.Unbind(gl);
+
+            Shader.Unbind(gl);
+        }
+
+        protected virtual void SetShaderUniforms(OpenGL gl) { }
     }
 }

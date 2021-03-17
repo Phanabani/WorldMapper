@@ -8,9 +8,16 @@ namespace WorldMapper.World
     public class TerrainObject : MeshObjectBase
     {
         private float[] _barycentric;
-        protected VertexBuffer BarycentricBuffer;
+        private VertexBuffer _barycentricBuffer;
 
-        public TerrainObject()
+        public TerrainObject(OpenGL gl)
+        {
+            GenerateGeometry();
+            CreateBuffers(gl);
+            CreateCustomBuffers(gl);
+        }
+
+        private void GenerateGeometry()
         {
             Vertices = new[]
             {
@@ -24,14 +31,18 @@ namespace WorldMapper.World
             };
         }
 
-        protected override void CreateCustomBuffers(OpenGL gl)
+        private void CreateCustomBuffers(OpenGL gl)
         {
-            BarycentricBuffer = new VertexBuffer();
-            BarycentricBuffer.Create(gl);
+            BufferArray.Bind(gl);
+
+            _barycentricBuffer = new VertexBuffer();
+            _barycentricBuffer.Create(gl);
             UpdateBarycentricData(gl);
+
+            BufferArray.Unbind(gl);
         }
 
-        protected void UpdateBarycentricData(OpenGL gl, bool removeEdge = false)
+        private void UpdateBarycentricData(OpenGL gl, bool removeEdge = false)
         {
             _barycentric = new float[VertexCount * 3];
             var Q = removeEdge ? 1f : 0f;
@@ -63,8 +74,9 @@ namespace WorldMapper.World
                 even = !even;
             }
 
-            BarycentricBuffer.Bind(gl);
-            BarycentricBuffer.SetData(gl, WireframeShader.AttributeIndexBarycentric, _barycentric, false, 3);
+            _barycentricBuffer.Bind(gl);
+            _barycentricBuffer.SetData(gl, WireframeShader.AttributeIndexBarycentric, _barycentric, false, 3);
+            _barycentricBuffer.Unbind(gl);
         }
     }
 }
