@@ -24,7 +24,7 @@ namespace WorldMapper.World
             }
             foreach (var obj in Objects)
             {
-                obj.Draw(gl, Camera.ProjectionMatrix, Camera.Transform.Matrix);
+                obj.Draw(gl);
             }
         }
     }

@@ -32,7 +32,7 @@ namespace WorldMapper.World
             BufferArray.Unbind(gl);
         }
 
-        public void Draw(OpenGL gl, Matrix4x4 projection, Matrix4x4 view)
+        public void Draw(OpenGL gl)
         {
             if (Shader is null)
                 throw new InvalidOperationException("Missing shader");
@@ -40,10 +40,6 @@ namespace WorldMapper.World
             Shader.Bind(gl);
 
             SetShaderUniforms(gl);
-            // NOTE this could be optimized perhaps by iterating through each
-            // unique shader and only setting them when necessary
-            Shader.SetProjection(gl, projection);
-            Shader.SetView(gl, view);
             Shader.SetModel(gl, Transform.Matrix);
 
             BufferArray.Bind(gl);

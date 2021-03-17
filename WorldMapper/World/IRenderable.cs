@@ -13,6 +13,6 @@ namespace WorldMapper.World
         ShaderBase Shader { get; set; }
 
         void CreateBuffers(OpenGL gl);
-        void Draw(OpenGL gl, Matrix4x4 projection, Matrix4x4 view);
+        void Draw(OpenGL gl);
     }
 }
