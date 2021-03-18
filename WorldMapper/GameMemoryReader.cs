@@ -12,8 +12,8 @@ namespace WorldMapper
         public Matrix4x4 CameraRotMatrix => _cameraRotMatrix;
 
         public Matrix4x4 CameraMatrix =>
-            // Matrix4x4.CreateTranslation(_cameraPos) * _cameraRotMatrix;
-            Matrix4x4.CreateTranslation(_cameraPos);
+            _cameraRotMatrix
+            * Matrix4x4.CreateTranslation(_cameraPos);
 
         public char UpAxis
         {
@@ -144,7 +144,7 @@ namespace WorldMapper
         public void ReadCameraRotation()
         {
             ReadMatrix3x3FromMemory(CameraRotMatrixAddress, ref _cameraRotMatrix);
-            _cameraRotMatrix *= _axisOrder;
+            _cameraRotMatrix = _axisOrder * _cameraRotMatrix;
         }
     }
 }
