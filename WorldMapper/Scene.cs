@@ -17,13 +17,16 @@ namespace WorldMapper
         private long _lastTime;
         private float _deltaTime;
 
-        private readonly Matrix4x4 _camAdjust = Matrix4x4.CreateScale(-1, 1, 1);
-
         public Scene()
         {
-            _memoryReader = new GameMemoryReader(
-                "pcsx2", 0x20189EA0, 0x201BBD70, 0x201B9840
-            );
+            _memoryReader = new GameMemoryReader
+            {
+                UpAxis = 'z',
+                ProcessName = "pcsx2",
+                CharacterPosAddress = 0x20189EA0,
+                CameraPosAddress = 0x201B9980,
+                CameraRotMatrixAddress = 0x201B9840
+            };
         }
 
         private void SampleTime()
@@ -44,7 +47,7 @@ namespace WorldMapper
         /// <param name="height">The height of the screen.</param>
         public void Initialize(OpenGL gl, float width, float height)
         {
-            //  Create the shader program.
+            // Create the shader program.
             var wireframe = new WireframeShader(gl);
             wireframe.Bind(gl);
 
@@ -55,8 +58,10 @@ namespace WorldMapper
             wireframe.SetFillBackface(gl, 1, 0, 1, 0.5f);
             wireframe.SetStrokeBackface(gl, 0, 1, 0, 1);
 
-            wireframe.SetFixedWidthMix(gl, 0.8f);
-            wireframe.SetThickness(gl, 0.3f);
+            // wireframe.SetFixedWidthMix(gl, 0.8f);
+            // wireframe.SetThickness(gl, 0.3f);
+            wireframe.SetFixedWidthMix(gl, 1f);
+            wireframe.SetThickness(gl, 4f);
 
             wireframe.Unbind(gl);
 
@@ -69,14 +74,31 @@ namespace WorldMapper
                     Shader = wireframe,
                     Transform = new Transform
                     {
-                        // Position = new Vector3(300, 226, 128)
-                        Position = new Vector3(0, 0, 0),
+                        Position = new Vector3(300, 128, -225)
+                    }
+                },
+                // Ratchet's ship
+                new TerrainObject(gl)
+                {
+                    Shader = wireframe,
+                    Transform = new Transform
+                    {
+                        Position = new Vector3(300, 129, -208)
                     }
                 },
             });
 
-            _world.Camera = new Camera(width, height, 90);
-            _world.Camera.Transform.Position = new Vector3(0, 0, 4);
+            var PI = (float) Math.PI;
+
+            _world.Camera = new Camera(width, height, 90)
+            {
+                Transform =
+                {
+                    // Position = new Vector3(300, 160, -225),
+                    Position = new Vector3(300, 140, -208),
+                    Rotation = Quaternion.CreateFromYawPitchRoll(0, PI/2, 0)
+                }
+            };
         }
 
         /// <summary>
@@ -96,7 +118,8 @@ namespace WorldMapper
                 | OpenGL.GL_STENCIL_BUFFER_BIT
             );
 
-            _world.Objects[0].Transform.Matrix = _memoryReader.CameraRotMatrix * _camAdjust;
+            var trans = _world.Objects[0].Transform;
+            trans.Matrix = _memoryReader.CameraMatrix;
 
             _world.Draw(gl);
         }

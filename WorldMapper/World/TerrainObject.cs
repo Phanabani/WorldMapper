@@ -21,13 +21,20 @@ namespace WorldMapper.World
         {
             Vertices = new[]
             {
-                0f, 0f, 0f,
+                // YZ plane (pointing forward)
+                0f, 0f,  0f,
                 0f, 0f, -1f,
                 0f, 1f, -1f,
 
+                // XY plane (pointing up)
                 -0.5f, 0f, 0f,
-                0.5f, 0f, 0f,
-                0f, 1f, 0f,
+                 0.5f, 0f, 0f,
+                  0f,  1f, 0f,
+
+                // XZ plane (ground, pointing forward)
+                -1f, 0f, 0f,
+                 1f, 0f, 0f,
+                 0f, 0f, -0.5f,
             };
         }
 
