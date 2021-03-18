@@ -14,9 +14,6 @@ namespace WorldMapper
         private World.World _world = new World.World();
         private GameMemoryReader _memoryReader;
 
-        private long _lastTime;
-        private float _deltaTime;
-
         public Scene()
         {
             _memoryReader = new GameMemoryReader
@@ -27,16 +24,6 @@ namespace WorldMapper
                 CameraPosAddress = 0x201B9980,
                 CameraRotMatrixAddress = 0x201B9840
             };
-        }
-
-        private void SampleTime()
-        {
-            var now = DateTime.UtcNow;
-            long nowTicks = now.Ticks;
-            if (_lastTime != 0)
-                // Ticks equal 100ns AKA 10,000,000ths of a second
-                _deltaTime = (nowTicks - _lastTime) / 10_000_000f;
-            _lastTime = nowTicks;
         }
 
         /// <summary>
@@ -109,8 +96,6 @@ namespace WorldMapper
         {
             _memoryReader.ReadCameraPosition();
             _memoryReader.ReadCameraRotation();
-
-            SampleTime();
 
             gl.Clear(
                 OpenGL.GL_COLOR_BUFFER_BIT

@@ -80,6 +80,7 @@
             <SubType>Designer</SubType>
         </ApplicationDefinition>
         <Compile Include="ManifestResourceLoader.cs" />
+        <Compile Include="RenderTimer.cs" />
         <Compile Include="World\Camera.cs" />
         <Compile Include="World\IRenderable.cs" />
         <Compile Include="World\MeshObjectBase.cs" />
