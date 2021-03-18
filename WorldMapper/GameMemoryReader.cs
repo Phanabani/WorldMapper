@@ -50,7 +50,7 @@ namespace WorldMapper
         /// <returns>The number of processes found</returns>
         public int SetProcess(string name)
         {
-            Process[] processes = Process.GetProcessesByName("pcsx2");
+            Process[] processes = Process.GetProcessesByName(name);
             if (processes.Length == 0)
             {
                 return 0;
