@@ -27,6 +27,7 @@ namespace WorldMapper.World
         public float ClipNear { get; set; } = 0.1f;
         public float ClipFar { get; set; } = 100f;
         public Matrix4x4 ProjectionMatrix => _projectionMatrix;
+        public Matrix4x4 ViewMatrix => Transform.Matrix;
         public Transform Transform { get; } = new Transform(true);
 
         private float _fieldOfView;

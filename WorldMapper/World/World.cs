@@ -19,7 +19,7 @@ namespace WorldMapper.World
             {
                 shader.Bind(gl);
                 shader.SetProjection(gl, Camera.ProjectionMatrix);
-                shader.SetView(gl, Camera.Transform.Matrix);
+                shader.SetView(gl, Camera.ViewMatrix);
                 shader.Unbind(gl);
             }
             foreach (var obj in Objects)
