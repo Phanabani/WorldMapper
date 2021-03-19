@@ -9,11 +9,16 @@ namespace WorldMapper
     {
         public Vector3 CharacterPos => _characterPos;
         public Vector3 CameraPos => _cameraPos;
-        public Matrix4x4 CameraRotMatrix => _cameraRotMatrix;
+        public Quaternion CameraRot
+        {
+            get
+            {
+                var q = Quaternion.CreateFromRotationMatrix(_cameraRotMatrix);
+                return new Quaternion(q.X, -q.Y, -q.Z, q.W);
+            }
+        }
 
-        public Matrix4x4 CameraMatrix =>
-            _cameraRotMatrix
-            * Matrix4x4.CreateTranslation(_cameraPos);
+        public Matrix4x4 CameraRotMatrix => _cameraRotMatrix;
 
         public char UpAxis
         {
