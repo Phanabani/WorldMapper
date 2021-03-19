@@ -67,8 +67,11 @@ namespace WorldMapper.World
 
         private bool SetMatrix(Matrix4x4 matrix)
         {
-            _matrix = matrix;
-            return Matrix4x4.Decompose(matrix, out _scale, out _rotation, out _position);
+            var success = Matrix4x4.Decompose(
+                matrix, out _scale, out _rotation, out _position
+            );
+            ForceUpdateMatrix();
+            return success;
         }
 
         public void SetPosition(Vector3 position)
