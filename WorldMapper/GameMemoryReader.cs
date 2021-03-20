@@ -99,7 +99,7 @@ namespace WorldMapper
             return processes.Length;
         }
 
-        private void ReadVector3FromMemory(int address, ref Vector3 vector)
+        private void MemReadVector3(int address, ref Vector3 vector)
         {
             var bytesRead = 0;
             ReadProcessMemory((int)_hProcess, address, _buffer, 4 * 3, ref bytesRead);
@@ -108,7 +108,33 @@ namespace WorldMapper
             vector.Z = BitConverter.ToSingle(_buffer, 4 * 2);
         }
 
-        private void ReadMatrix3x3FromMemory(int address, ref Matrix4x4 mat)
+        private void MemReadMatrix3x3(int address, ref Matrix4x4 mat)
+        {
+            var bytesRead = 0;
+            ReadProcessMemory((int)_hProcess, address, _buffer, 4 * 9, ref bytesRead);
+
+            mat.M11 = BitConverter.ToSingle(_buffer, 4 * 0);
+            mat.M12 = BitConverter.ToSingle(_buffer, 4 * 1);
+            mat.M13 = BitConverter.ToSingle(_buffer, 4 * 2);
+            mat.M14 = 0;
+
+            mat.M21 = BitConverter.ToSingle(_buffer, 4 * 3);
+            mat.M22 = BitConverter.ToSingle(_buffer, 4 * 4);
+            mat.M23 = BitConverter.ToSingle(_buffer, 4 * 5);
+            mat.M24 = 0;
+
+            mat.M31 = BitConverter.ToSingle(_buffer, 4 * 6);
+            mat.M32 = BitConverter.ToSingle(_buffer, 4 * 7);
+            mat.M33 = BitConverter.ToSingle(_buffer, 4 * 8);
+            mat.M34 = 0;
+
+            mat.M41 = 0f;
+            mat.M42 = 0f;
+            mat.M43 = 0f;
+            mat.M44 = 1f;
+        }
+
+        private void MemReadMatrix3x4(int address, ref Matrix4x4 mat)
         {
             var bytesRead = 0;
             ReadProcessMemory((int)_hProcess, address, _buffer, 4 * 12, ref bytesRead);
@@ -134,21 +160,47 @@ namespace WorldMapper
             mat.M44 = 1f;
         }
 
+        private void MemReadMatrix4x4(int address, ref Matrix4x4 mat)
+        {
+            var bytesRead = 0;
+            ReadProcessMemory((int)_hProcess, address, _buffer, 4 * 16, ref bytesRead);
+
+            mat.M11 = BitConverter.ToSingle(_buffer, 4 * 0);
+            mat.M12 = BitConverter.ToSingle(_buffer, 4 * 1);
+            mat.M13 = BitConverter.ToSingle(_buffer, 4 * 2);
+            mat.M14 = BitConverter.ToSingle(_buffer, 4 * 3);
+
+            mat.M21 = BitConverter.ToSingle(_buffer, 4 * 4);
+            mat.M22 = BitConverter.ToSingle(_buffer, 4 * 5);
+            mat.M23 = BitConverter.ToSingle(_buffer, 4 * 6);
+            mat.M24 = BitConverter.ToSingle(_buffer, 4 * 7);
+
+            mat.M31 = BitConverter.ToSingle(_buffer, 4 * 8);
+            mat.M32 = BitConverter.ToSingle(_buffer, 4 * 9);
+            mat.M33 = BitConverter.ToSingle(_buffer, 4 * 10);
+            mat.M34 = BitConverter.ToSingle(_buffer, 4 * 11);
+
+            mat.M41 = BitConverter.ToSingle(_buffer, 4 * 12);
+            mat.M42 = BitConverter.ToSingle(_buffer, 4 * 13);
+            mat.M43 = BitConverter.ToSingle(_buffer, 4 * 14);
+            mat.M44 = BitConverter.ToSingle(_buffer, 4 * 15);
+        }
+
         public void ReadCharacterPos()
         {
-            ReadVector3FromMemory(CharacterPosAddress, ref _characterPos);
+            MemReadVector3(CharacterPosAddress, ref _characterPos);
             _characterPos = Vector3.Transform(_characterPos, _axisOrder);
         }
 
         public void ReadCameraPosition()
         {
-            ReadVector3FromMemory(CameraPosAddress, ref _cameraPos);
+            MemReadVector3(CameraPosAddress, ref _cameraPos);
             _cameraPos = Vector3.Transform(_cameraPos, _axisOrder);
         }
 
         public void ReadCameraRotation()
         {
-            ReadMatrix3x3FromMemory(CameraRotMatrixAddress, ref _cameraRotMatrix);
+            MemReadMatrix3x4(CameraRotMatrixAddress, ref _cameraRotMatrix);
             _cameraRotMatrix = _axisOrder * _cameraRotMatrix;
         }
     }
