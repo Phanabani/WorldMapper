@@ -12,6 +12,8 @@ namespace WorldMapper
     /// </summary>
     public class Scene
     {
+        private const float PI = (float) Math.PI;
+
         private World.World _world = new World.World();
         private GameMemoryReader _memoryReader;
 
@@ -22,8 +24,9 @@ namespace WorldMapper
                 UpAxis = 'z',
                 ProcessName = "pcsx2",
                 CharacterPosAddress = 0x20189EA0,
-                CameraPosAddress = 0x201B9980,
-                CameraRotMatrixAddress = 0x201B9840
+                CameraPosAddress = 0x201BA500,
+                CameraRotMatrixAddress = 0x201BA730,
+                CameraMatrixAddress = 0x201BB270
             };
         }
 
@@ -35,7 +38,7 @@ namespace WorldMapper
         /// <param name="height">The height of the screen.</param>
         public void Initialize(OpenGL gl, float width, float height)
         {
-            // Create the shader program.
+            // Create the shader
             var wireframe = new WireframeShader(gl);
             wireframe.Bind(gl);
 
@@ -52,39 +55,88 @@ namespace WorldMapper
             wireframe.SetThickness(gl, 4f);
 
             wireframe.Unbind(gl);
-
             _world.Shaders.Add(wireframe);
+
+            // Add objects to the world
+            var verts = new[]
+            {
+                // YZ plane (pointing forward)
+                0f, 0f,  0f,
+                0f, 0f, -1f,
+                0f, 1f, -1f,
+
+                // XY plane (pointing up)
+                -0.5f, 0f, 0f,
+                0.5f, 0f, 0f,
+                0f,  1f, 0f,
+
+                // XZ plane (ground, pointing forward)
+                -1f, 0f, 0f,
+                1f, 0f, 0f,
+                0f, 0f, -0.5f,
+            };
 
             _world.Objects.AddRange(new []
             {
-                new TerrainObject(gl)
+                // Origin
+                new WireframeMeshObject(gl, verts)
                 {
                     Shader = wireframe,
                     Transform = new Transform
                     {
-                        Position = new Vector3(300, 128, -225)
+                        Position = new Vector3(0, 128, 0)
                     }
                 },
+
                 // Ratchet's ship
-                new TerrainObject(gl)
+                new WireframeMeshObject(gl, verts)
                 {
                     Shader = wireframe,
                     Transform = new Transform
                     {
-                        Position = new Vector3(300, 129, -208)
+                        Position = new Vector3(510, 120, -312.5f)
+                    }
+                },
+
+                // Maktar center circle near light bridge
+                new WireframeMeshObject(gl, verts)
+                {
+                    Shader = wireframe,
+                    Transform = new Transform
+                    {
+                        Position = new Vector3(500, 110, -358)
+                    }
+                },
+
+                // Maktar circle thing right
+                new WireframeMeshObject(gl, verts)
+                {
+                    Shader = wireframe,
+                    Transform = new Transform
+                    {
+                        Position = new Vector3(508, 110, -352)
+                    }
+                },
+
+                // Maktar circle thing left
+                new WireframeMeshObject(gl, verts)
+                {
+                    Shader = wireframe,
+                    Transform = new Transform
+                    {
+                        Position = new Vector3(492f, 110, -352)
                     }
                 },
             });
 
-            var PI = (float) Math.PI;
-
-            _world.Camera = new Camera(width, height, 90)
+            // Add a camera
+            _world.Camera = new Camera(width, height, 38)
             {
                 Transform =
                 {
                     // Position = new Vector3(300, 160, -225),
                     Position = new Vector3(300, 140, -208),
-                    Rotation = Quaternion.CreateFromYawPitchRoll(0, PI/2, 0)
+                    Rotation = Quaternion.CreateFromYawPitchRoll(0, 0, 0)
                 }
             };
         }
