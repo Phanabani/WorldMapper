@@ -6,16 +6,26 @@ using WorldMapper.Shaders;
 
 namespace WorldMapper.World
 {
-    public abstract class MeshObjectBase : IRenderable
+    public class MeshObject : IRenderable
     {
-        protected float[] Vertices;
-
+        public float[] Vertices { get; set; } = new float[0];
         public int VertexCount => Vertices.Length;
         public VertexBufferArray BufferArray { get; private set; }
         public Transform Transform { get; set; } = new Transform();
         public ShaderBase Shader { get; set; }
 
         protected VertexBuffer VertexDataBuffer;
+
+        public MeshObject(OpenGL gl)
+        {
+            CreateBuffers(gl);
+        }
+
+        public MeshObject(OpenGL gl, float[] vertices) : this(gl)
+        {
+            Vertices = vertices;
+            FlushMesh(gl);
+        }
 
         public void CreateBuffers(OpenGL gl)
         {
@@ -25,10 +35,16 @@ namespace WorldMapper.World
 
             VertexDataBuffer = new VertexBuffer();
             VertexDataBuffer.Create(gl);
+
+            BufferArray.Unbind(gl);
+        }
+
+        public void FlushMesh(OpenGL gl)
+        {
+            BufferArray.Bind(gl);
             VertexDataBuffer.Bind(gl);
             VertexDataBuffer.SetData(gl, 0, Vertices, false, 3);
             VertexDataBuffer.Unbind(gl);
-
             BufferArray.Unbind(gl);
         }
 

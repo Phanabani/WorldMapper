@@ -5,47 +5,28 @@ using WorldMapper.Shaders;
 
 namespace WorldMapper.World
 {
-    public class TerrainObject : MeshObjectBase
+    public class WireframeMeshObject : MeshObject
     {
         private float[] _barycentric;
         private VertexBuffer _barycentricBuffer;
 
-        public TerrainObject(OpenGL gl)
+        public WireframeMeshObject(OpenGL gl) : base(gl)
         {
-            GenerateGeometry();
-            CreateBuffers(gl);
             CreateCustomBuffers(gl);
         }
 
-        private void GenerateGeometry()
+        public WireframeMeshObject(OpenGL gl, float[] vertices) : this(gl)
         {
-            Vertices = new[]
-            {
-                // YZ plane (pointing forward)
-                0f, 0f,  0f,
-                0f, 0f, -1f,
-                0f, 1f, -1f,
-
-                // XY plane (pointing up)
-                -0.5f, 0f, 0f,
-                 0.5f, 0f, 0f,
-                  0f,  1f, 0f,
-
-                // XZ plane (ground, pointing forward)
-                -1f, 0f, 0f,
-                 1f, 0f, 0f,
-                 0f, 0f, -0.5f,
-            };
+            Vertices = vertices;
+            FlushMesh(gl);
+            UpdateBarycentricData(gl);
         }
 
         private void CreateCustomBuffers(OpenGL gl)
         {
             BufferArray.Bind(gl);
-
             _barycentricBuffer = new VertexBuffer();
             _barycentricBuffer.Create(gl);
-            UpdateBarycentricData(gl);
-
             BufferArray.Unbind(gl);
         }
 
@@ -81,9 +62,14 @@ namespace WorldMapper.World
                 even = !even;
             }
 
+            BufferArray.Bind(gl);
             _barycentricBuffer.Bind(gl);
-            _barycentricBuffer.SetData(gl, WireframeShader.AttributeIndexBarycentric, _barycentric, false, 3);
+            _barycentricBuffer.SetData(
+                gl, WireframeShader.AttributeIndexBarycentric, _barycentric,
+                false, 3
+            );
             _barycentricBuffer.Unbind(gl);
+            BufferArray.Unbind(gl);
         }
     }
 }

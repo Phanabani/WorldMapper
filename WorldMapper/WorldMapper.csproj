@@ -84,8 +84,8 @@
         <Compile Include="MathUtils.cs" />
         <Compile Include="World\Camera.cs" />
         <Compile Include="World\IRenderable.cs" />
-        <Compile Include="World\MeshObjectBase.cs" />
-        <Compile Include="World\TerrainObject.cs" />
+        <Compile Include="World\MeshObject.cs" />
+        <Compile Include="World\WireframeMeshObject.cs" />
         <Compile Include="World\Transform.cs" />
         <Compile Include="OpenGLTransparencyPatcher.cs" />
         <Compile Include="Scene.cs" />
