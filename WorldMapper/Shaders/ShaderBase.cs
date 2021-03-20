@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using SharpGL;
 using SharpGL.Shaders;
-using static WorldMapper.World.Utils;
+using static WorldMapper.MathUtils;
 
 namespace WorldMapper.Shaders
 {

@@ -81,12 +81,12 @@
         </ApplicationDefinition>
         <Compile Include="ManifestResourceLoader.cs" />
         <Compile Include="RenderTimer.cs" />
+        <Compile Include="MathUtils.cs" />
         <Compile Include="World\Camera.cs" />
         <Compile Include="World\IRenderable.cs" />
         <Compile Include="World\MeshObjectBase.cs" />
         <Compile Include="World\TerrainObject.cs" />
         <Compile Include="World\Transform.cs" />
-        <Compile Include="World\Utils.cs" />
         <Compile Include="OpenGLTransparencyPatcher.cs" />
         <Compile Include="Scene.cs" />
         <Compile Include="Shaders\ShaderBase.cs" />
