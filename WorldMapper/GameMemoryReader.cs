@@ -19,6 +19,7 @@ namespace WorldMapper
         }
 
         public Matrix4x4 CameraRotMatrix => _cameraRotMatrix;
+        public Matrix4x4 CameraMatrix => _cameraMatrix;
 
         public char UpAxis
         {
@@ -39,10 +40,12 @@ namespace WorldMapper
         public int CharacterPosAddress { get; set; }
         public int CameraPosAddress { get; set; }
         public int CameraRotMatrixAddress { get; set; }
+        public int CameraMatrixAddress { get; set; }
 
         private Vector3 _characterPos;
         private Vector3 _cameraPos;
         private Matrix4x4 _cameraRotMatrix;
+        private Matrix4x4 _cameraMatrix;
         private char _upAxis;
         private string _processName;
         private Matrix4x4 _axisOrder = Matrix4x4.Identity;
@@ -73,6 +76,7 @@ namespace WorldMapper
                         0,  1,  0, 0,
                         0,  0,  0, 1
                     );
+                    // _axisOrder = Matrix4x4.CreateRotationX((float) -Math.PI/2);
                     break;
                 default:
                     throw new ArgumentException("Up axis must be 'y' or 'z'");
@@ -202,6 +206,16 @@ namespace WorldMapper
         {
             MemReadMatrix3x4(CameraRotMatrixAddress, ref _cameraRotMatrix);
             _cameraRotMatrix = _axisOrder * _cameraRotMatrix;
+        }
+
+        public void ReadCameraMatrix()
+        {
+            // var mat = new Matrix4x4();
+            MemReadMatrix3x4(CameraMatrixAddress, ref _cameraMatrix);
+            // _cameraMatrix = MatrixZUpToYUp(mat);
+            // _cameraMatrix = _axisOrder * mat;
+            // _cameraMatrix.M42 = mat.M43;
+            // _cameraMatrix.M43 = -mat.M42;
         }
     }
 }

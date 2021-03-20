@@ -147,18 +147,25 @@ namespace WorldMapper
         /// <param name="gl">The OpenGL instance.</param>
         public void Draw(OpenGL gl)
         {
-            _memoryReader.ReadCameraPosition();
-            _memoryReader.ReadCameraRotation();
-
             gl.Clear(
                 OpenGL.GL_COLOR_BUFFER_BIT
                 | OpenGL.GL_DEPTH_BUFFER_BIT
                 | OpenGL.GL_STENCIL_BUFFER_BIT
             );
 
-            var trans = _world.Objects[0].Transform;
-            trans.Matrix = _memoryReader.CameraMatrix;
+            _memoryReader.ReadCameraPosition();
+            _memoryReader.ReadCameraRotation();
+            _memoryReader.ReadCameraMatrix();
 
+            // var trans = _world.Objects[0].Transform;
+            var trans = _world.Camera.Transform;
+            // trans.Rotation = _memoryReader.CameraRot;
+            trans.Matrix = _memoryReader.CameraMatrix;
+            trans.Position = _memoryReader.CameraPos;
+
+            var euler = MatrixToEuler(trans.Matrix) * 180f / PI;
+            gl.DrawText(20, 50, 1f, 0f, 0f, "Courier New", 24f, trans.Position.ToString("F03"));
+            gl.DrawText(20, 20, 1f, 0f, 0f, "Courier New", 24f, euler.ToString("F03"));
             _world.Draw(gl);
         }
     }

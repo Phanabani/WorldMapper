@@ -61,30 +61,16 @@ namespace WorldMapper
 
         public static Matrix4x4 MatrixZUpToYUp(Matrix4x4 m)
         {
-            // return new Matrix4x4(
-            //      m.M11,   m.M13, -m.M12,  m.M14,
-            //      m.M31,   m.M33, -m.M32,  m.M34,
-            //     -m.M21,  -m.M23,  m.M22, -m.M24,
-            //      m.M41,   m.M43, -m.M42,  m.M44
-            // );
-
             // first switch the second and third row
             // then switch the second and third column
             // multiply the values in the third row by -1
             // multiply the values in the third column by -1
-            // finally, we matrix multiply by a 90deg rotation about the Y axis
-            // 0  0 -1  0
-            // 0  1  0  0
-            // 1  0  0  0
-            // 0  0  0  1
-            return
-                Matrix4x4.CreateRotationY((float)-Math.PI/2)
-                * new Matrix4x4(
-                    m.M11,   m.M13, -m.M12,  m.M14,
-                    m.M31,   m.M33, -m.M32,  m.M34,
-                   -m.M21,  -m.M23,  m.M22, -m.M24,
-                    m.M41,   m.M43, -m.M42,  m.M44
-                );
+            return new Matrix4x4(
+                m.M11,  m.M13, -m.M12,  m.M14,
+                m.M31,  m.M33, -m.M32,  m.M34,
+               -m.M21, -m.M23,  m.M22, -m.M24,
+                m.M41,  m.M43, -m.M42,  m.M44
+            );
         }
     }
 }
