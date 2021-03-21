@@ -46,23 +46,30 @@ namespace WorldMapper.World
         /// will not mark it as dirty, so the matrix will not be updated.
         /// This method will force it to update.
         /// </summary>
-        public Matrix4x4 ForceUpdateMatrix()
+        public void ForceUpdateMatrix()
         {
-            Matrix4x4 trans;
+            Matrix4x4 trans, rot, scale;
             if (_isCamera)
+            {
                 trans = Matrix4x4.CreateTranslation(-_position);
+                rot = Matrix4x4.CreateFromQuaternion(Quaternion.Inverse(_rotation));
+                scale = Matrix4x4.CreateScale(_scale);
+                _matrix = trans * rot * scale;
+            }
             else
+            {
                 trans = Matrix4x4.CreateTranslation(_position);
-            var rot = Matrix4x4.CreateFromQuaternion(_rotation);
-            var scale = Matrix4x4.CreateScale(_scale);
-            _matrix = trans * rot * scale;
+                rot = Matrix4x4.CreateFromQuaternion(_rotation);
+                _matrix = trans * rot;  // scaling is not supported for cameras
+            }
             _dirty = false;
-            return _matrix;
         }
 
         private Matrix4x4 GetMatrix()
         {
-            return _dirty ? ForceUpdateMatrix() : _matrix;
+            if (_dirty)
+                ForceUpdateMatrix();
+            return _matrix;
         }
 
         private bool SetMatrix(Matrix4x4 matrix)
