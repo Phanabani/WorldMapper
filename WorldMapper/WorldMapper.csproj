@@ -83,7 +83,8 @@
         <Compile Include="RenderTimer.cs" />
         <Compile Include="MathUtils.cs" />
         <Compile Include="World\Camera.cs" />
-        <Compile Include="World\IRenderable.cs" />
+        <Compile Include="World\IDrawable.cs" />
+        <Compile Include="World\ITransformable.cs" />
         <Compile Include="World\MeshObject.cs" />
         <Compile Include="World\WireframeMeshObject.cs" />
         <Compile Include="World\Transform.cs" />

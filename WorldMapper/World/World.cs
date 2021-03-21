@@ -7,7 +7,7 @@ namespace WorldMapper.World
 {
     public class World
     {
-        public List<IRenderable> Objects { get; set; } = new List<IRenderable>();
+        public List<IDrawable> Objects { get; set; } = new List<IDrawable>();
         public List<ShaderBase> Shaders { get; set; } = new List<ShaderBase>();
         public Camera Camera { get; set; } = null;
 

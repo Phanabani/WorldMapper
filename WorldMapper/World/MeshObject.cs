@@ -6,7 +6,7 @@ using WorldMapper.Shaders;
 
 namespace WorldMapper.World
 {
-    public class MeshObject : IRenderable
+    public class MeshObject : IDrawable
     {
         public float[] Vertices { get; set; } = new float[0];
         public int VertexCount => Vertices.Length;

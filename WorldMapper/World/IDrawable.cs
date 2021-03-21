@@ -5,11 +5,10 @@ using WorldMapper.Shaders;
 
 namespace WorldMapper.World
 {
-    public interface IRenderable
+    public interface IDrawable : ITransformable
     {
         VertexBufferArray BufferArray { get; }
         int VertexCount { get; }
-        Transform Transform { get; set; }
         ShaderBase Shader { get; set; }
 
         void CreateBuffers(OpenGL gl);
