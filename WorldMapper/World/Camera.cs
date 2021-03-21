@@ -33,11 +33,14 @@ namespace WorldMapper.World
         private float _fieldOfView;
         private Matrix4x4 _projectionMatrix;
 
-        public Camera(float width, float height, float fieldOfView = 75)
+        public Camera(float width, float height, float fieldOfView = 75,
+            float clipNear = 0.1f, float clipFar = 100f)
         {
             Width = width;
             Height = height;
             FieldOfView = fieldOfView;
+            ClipNear = clipNear;
+            ClipFar = clipFar;
             UpdateProjectionMatrix();
         }
 
