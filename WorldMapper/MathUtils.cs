@@ -59,18 +59,36 @@ namespace WorldMapper
             return (d1 < d2) ? eul1 : eul2;
         }
 
-        public static Matrix4x4 MatrixZUpToYUp(Matrix4x4 m)
+        public static Matrix4x4 EulerToMatrix(Vector3 euler)
         {
-            // first switch the second and third row
-            // then switch the second and third column
-            // multiply the values in the third row by -1
-            // multiply the values in the third column by -1
-            return new Matrix4x4(
-                m.M11,  m.M13, -m.M12,  m.M14,
-                m.M31,  m.M33, -m.M32,  m.M34,
-               -m.M21, -m.M23,  m.M22, -m.M24,
-                m.M41,  m.M43, -m.M42,  m.M44
-            );
+            double ci, cj, ch, si, sj, sh, cc, cs, sc, ss;
+
+            ci = Math.Cos(euler.X);
+            cj = Math.Cos(euler.Y);
+            ch = Math.Cos(euler.Z);
+            si = Math.Sin(euler.X);
+            sj = Math.Sin(euler.Y);
+            sh = Math.Sin(euler.Z);
+            cc = ci * ch;
+            cs = ci * sh;
+            sc = si * ch;
+            ss = si * sh;
+
+            var m = new Matrix4x4
+            {
+                M11 = (float) (cj * ch),
+                M12 = (float) (cj * sh),
+                M13 = (float) -sj,
+                M21 = (float) (sj * sc - cs),
+                M22 = (float) (sj * ss + cc),
+                M23 = (float) (cj * si),
+                M31 = (float) (sj * cc + ss),
+                M32 = (float) (sj * cs - sc),
+                M33 = (float) (cj * ci),
+                M44 = 1
+            };
+
+            return m;
         }
     }
 }
