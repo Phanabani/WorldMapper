@@ -9,17 +9,7 @@ namespace WorldMapper
     {
         public Vector3 CharacterPos => _characterPos;
         public Vector3 CameraPos => _cameraPos;
-        public Quaternion CameraRot
-        {
-            get
-            {
-                var q = Quaternion.CreateFromRotationMatrix(_cameraRotMatrix);
-                return new Quaternion(q.X, -q.Y, -q.Z, q.W);
-            }
-        }
-
-        public Matrix4x4 CameraRotMatrix => _cameraRotMatrix;
-        public Matrix4x4 CameraMatrix => _cameraMatrix;
+        public Quaternion CameraRot => _cameraRot;
 
         public char UpAxis
         {
@@ -39,13 +29,13 @@ namespace WorldMapper
 
         public int CharacterPosAddress { get; set; }
         public int CameraPosAddress { get; set; }
+        public int CameraRotAddress { get; set; }
         public int CameraRotMatrixAddress { get; set; }
         public int CameraMatrixAddress { get; set; }
 
         private Vector3 _characterPos;
         private Vector3 _cameraPos;
-        private Matrix4x4 _cameraRotMatrix;
-        private Matrix4x4 _cameraMatrix;
+        private Quaternion _cameraRot;
         private char _upAxis;
         private string _processName;
         private Matrix4x4 _axisOrder = Matrix4x4.Identity;
@@ -204,14 +194,27 @@ namespace WorldMapper
 
         public void ReadCameraRotation()
         {
-            MemReadMatrix3x4(CameraRotMatrixAddress, ref _cameraRotMatrix);
-            _cameraRotMatrix = _axisOrder * _cameraRotMatrix;
-        }
+            var PI = (float) Math.PI;
 
-        public void ReadCameraMatrix()
-        {
-            // var mat = new Matrix4x4();
-            MemReadMatrix3x4(CameraMatrixAddress, ref _cameraMatrix);
+            // var euler0 = new Vector3();
+            // MemReadVector3(CameraRotAddress, ref euler0);
+            // var euler = new Vector3(-euler0.Y, PI/2-euler0.Z, euler0.X);
+            // _cameraMatrix = EulerToMatrix(euler);
+            // _cameraRot = Quaternion.CreateFromRotationMatrix(_cameraMatrix);
+
+            var camMat = new Matrix4x4();
+            MemReadMatrix3x4(CameraMatrixAddress, ref camMat);
+
+            // var euler0 = MatrixToEuler(_cameraMatrix);
+            // var euler = new Vector3(-euler0.Y, euler0.Z-PI/2, euler0.X);
+            // _cameraMatrix = EulerToMatrix(euler);
+            // _cameraRot = Quaternion.CreateFromRotationMatrix(_cameraMatrix);
+
+            var q = Quaternion.CreateFromRotationMatrix(camMat);
+            var fix = Quaternion.CreateFromYawPitchRoll(-PI/2, 0, 0);
+            _cameraRot = fix * new Quaternion(-q.Y, q.Z, -q.X, q.W);
+
+            // MatrixSwapYawRoll(ref _cameraMatrix);
             // _cameraMatrix = MatrixZUpToYUp(mat);
             // _cameraMatrix = _axisOrder * mat;
             // _cameraMatrix.M42 = mat.M43;

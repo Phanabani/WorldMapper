@@ -21,7 +21,6 @@
             OpenGLInitialized="OpenGLControl_OnOpenGLInitialized"
             OpenGLDraw="OpenGLControl_OnOpenGLDraw"
             RenderContextType="FBO"
-            OpenGLVersion="OpenGL3_3"
-            FrameRate="30" />
+            FrameRate="60" />
     </Grid>
 </Window>

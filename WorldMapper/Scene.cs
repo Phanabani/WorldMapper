@@ -25,6 +25,7 @@ namespace WorldMapper
                 ProcessName = "pcsx2",
                 CharacterPosAddress = 0x20189EA0,
                 CameraPosAddress = 0x201BA500,
+                CameraRotAddress = 0x201BA510,
                 CameraRotMatrixAddress = 0x201BA730,
                 CameraMatrixAddress = 0x201BB270
             };
@@ -38,7 +39,7 @@ namespace WorldMapper
         /// <param name="height">The height of the screen.</param>
         public void Initialize(OpenGL gl, float width, float height)
         {
-            // Create the shader
+            #region Shader
             var wireframe = new WireframeShader(gl);
             wireframe.Bind(gl);
 
@@ -56,7 +57,9 @@ namespace WorldMapper
 
             wireframe.Unbind(gl);
             _world.Shaders.Add(wireframe);
+            #endregion
 
+            #region Geometry
             // Add objects to the world
             var verts = new[]
             {
@@ -75,7 +78,9 @@ namespace WorldMapper
                 1f, 0f, 0f,
                 0f, 0f, -0.5f,
             };
+            #endregion
 
+            #region Main world
             _world.Objects.AddRange(new []
             {
                 // Origin
@@ -130,7 +135,7 @@ namespace WorldMapper
             });
 
             // Add a camera
-            _world.Camera = new Camera(width, height, 38)
+            _world.Camera = new Camera(width, height, 45, clipFar: 300f)
             {
                 Transform =
                 {
@@ -139,6 +144,7 @@ namespace WorldMapper
                     Rotation = Quaternion.CreateFromYawPitchRoll(0, 0, 0)
                 }
             };
+            #endregion
         }
 
         /// <summary>
@@ -155,12 +161,9 @@ namespace WorldMapper
 
             _memoryReader.ReadCameraPosition();
             _memoryReader.ReadCameraRotation();
-            _memoryReader.ReadCameraMatrix();
 
-            // var trans = _world.Objects[0].Transform;
             var trans = _world.Camera.Transform;
-            // trans.Rotation = _memoryReader.CameraRot;
-            trans.Matrix = _memoryReader.CameraMatrix;
+            trans.Rotation = _memoryReader.CameraRot;
             trans.Position = _memoryReader.CameraPos;
 
             var euler = MatrixToEuler(trans.Matrix) * 180f / PI;
