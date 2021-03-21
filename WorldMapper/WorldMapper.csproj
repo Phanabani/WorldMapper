@@ -94,7 +94,7 @@
         <Compile Include="Shaders\WireframeShader.cs" />
         <Compile Include="WindowsServices.cs" />
         <Compile Include="World\World.cs" />
-        <Page Include="MainWindow.xaml">
+        <Page Include="OverlayWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
         </Page>
@@ -102,8 +102,8 @@
             <DependentUpon>App.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Include="MainWindow.xaml.cs">
-            <DependentUpon>MainWindow.xaml</DependentUpon>
+        <Compile Include="OverlayWindow.xaml.cs">
+            <DependentUpon>OverlayWindow.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
