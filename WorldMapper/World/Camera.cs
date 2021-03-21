@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace WorldMapper.World
 {
-    public class Camera
+    public class Camera : ITransformable
     {
         /// <summary>
         /// Vertical field of view angle in degrees.
@@ -28,7 +28,7 @@ namespace WorldMapper.World
         public float ClipFar { get; set; } = 100f;
         public Matrix4x4 ProjectionMatrix => _projectionMatrix;
         public Matrix4x4 ViewMatrix => Transform.Matrix;
-        public Transform Transform { get; } = new Transform(true);
+        public Transform Transform { get; set; } = new Transform(true);
 
         private float _fieldOfView;
         private Matrix4x4 _projectionMatrix;
