@@ -12,6 +12,8 @@
     <ui:Page.Resources>
         <pages:ControlsData x:Key="ControlsData" />
         <converters:HexStringConverter x:Key="HexStringConverter" />
+        <converters:FloatRoundingConverter x:Key="Float1DigitConverter"
+                                           Digits="1" />
 
         <GridLength x:Key="GridPadding">8</GridLength>
         <Thickness x:Key="HeaderMargin">0 16 0 16</Thickness>
@@ -98,7 +100,8 @@
                     ui:ControlHelper.PlaceholderText="Placeholder"
                     Value="{Binding Source={StaticResource ControlsData},
                                     Path=FieldOfView,
-                                    Mode=TwoWay
+                                    Mode=TwoWay,
+                                    Converter={StaticResource Float1DigitConverter}
                                     }"
                     Minimum="10" Maximum="110"
                     SmallChange="1" LargeChange="5"
