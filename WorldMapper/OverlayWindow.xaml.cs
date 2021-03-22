@@ -8,11 +8,11 @@ namespace WorldMapper
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow
+    public partial class OverlayWindow
     {
         private readonly Scene _scene;
 
-        public MainWindow()
+        public OverlayWindow()
         {
             OpenGLTransparencyPatcher.DoPatching();
             InitializeComponent();
