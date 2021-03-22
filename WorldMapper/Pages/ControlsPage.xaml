@@ -5,12 +5,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:local="clr-namespace:WorldMapper.Pages"
+        xmlns:pages="clr-namespace:WorldMapper.Pages"
+        xmlns:converters="clr-namespace:WorldMapper.Converters"
         mc:Ignorable="d"
         Width="400" Height="400">
     <ui:Page.Resources>
-        <local:ControlsData x:Key="ControlsData" />
-        <local:HexStringConverter x:Key="HexStringConverter" />
+        <pages:ControlsData x:Key="ControlsData" />
+        <converters:HexStringConverter x:Key="HexStringConverter" />
 
         <GridLength x:Key="GridPadding">8</GridLength>
         <Thickness x:Key="HeaderMargin">0 16 0 16</Thickness>
