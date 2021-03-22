@@ -9,11 +9,10 @@
         mc:Ignorable="d"
         Width="400" Height="400">
     <ui:Page.Resources>
-        <local:ControlsData x:Key="controlsData" />
-        <local:HexStringConverter x:Key="hexStringConverter" />
+        <local:ControlsData x:Key="ControlsData" />
+        <local:HexStringConverter x:Key="HexStringConverter" />
 
-        <Thickness x:Key="GridKeyMargin">0 0 8 16</Thickness>
-        <Thickness x:Key="GridValueMargin">0 0 0 16</Thickness>
+        <GridLength x:Key="GridPadding">8</GridLength>
         <Thickness x:Key="HeaderMargin">0 16 0 16</Thickness>
         <Style x:Key="Header" TargetType="Label"
                BasedOn="{StaticResource {x:Type Label}}">
@@ -22,13 +21,9 @@
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="FontSize" Value="18" />
         </Style>
-        <Style TargetType="Label"
-               BasedOn="{StaticResource {x:Type Label}}">
-            <Setter Property="Margin" Value="{StaticResource GridKeyMargin}" />
-        </Style>
         <Style TargetType="TextBox"
                BasedOn="{StaticResource {x:Type TextBox}}">
-            <Setter Property="Margin" Value="{StaticResource GridValueMargin}" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         </Style>
     </ui:Page.Resources>
 
@@ -47,43 +42,41 @@
         <Grid Name="MemoryAddresses" Grid.Row="1" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="8" />
+                <ColumnDefinition Width="{StaticResource GridPadding}" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="{StaticResource GridPadding}" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <TextBox Grid.Row="0" Grid.Column="0"
                      ui:ControlHelper.Header="Player position"
-                     KeyDown="TextBox_KeyEnterUpdate"
-                     Text="{Binding Source={StaticResource controlsData},
+                     Text="{Binding Source={StaticResource ControlsData},
                                     Path=PlayerPositionAddress,
                                     Mode=TwoWay,
-                                    Converter={StaticResource hexStringConverter}
-                           }"
-                     />
-            <Label Grid.Row="1" Grid.Column="0">
-                Camera position
-            </Label>
-            <TextBox Grid.Row="1" Grid.Column="0"
-                     ui:ControlHelper.Header="Camera position"
+                                    Converter={StaticResource HexStringConverter}
+                                    }"
                      KeyDown="TextBox_KeyEnterUpdate"
-                     Text="{Binding Source={StaticResource controlsData},
+                     />
+            <TextBox Grid.Row="2" Grid.Column="0"
+                     ui:ControlHelper.Header="Camera position"
+                     Text="{Binding Source={StaticResource ControlsData},
                                     Path=CameraPositionAddress,
                                     Mode=TwoWay,
-                                    Converter={StaticResource hexStringConverter}
-                           }"
-                     />
-            <TextBox Grid.Row="1" Grid.Column="2"
-                     ui:ControlHelper.Header="Camera rotation"
+                                    Converter={StaticResource HexStringConverter}
+                                    }"
                      KeyDown="TextBox_KeyEnterUpdate"
-                     Text="{Binding Source={StaticResource controlsData},
+                     />
+            <TextBox Grid.Row="2" Grid.Column="2"
+                     ui:ControlHelper.Header="Camera rotation"
+                     Text="{Binding Source={StaticResource ControlsData},
                                     Path=CameraRotationAddress,
                                     Mode=TwoWay,
-                                    Converter={StaticResource hexStringConverter}
-                           }"
+                                    Converter={StaticResource HexStringConverter}
+                                    }"
+                     KeyDown="TextBox_KeyEnterUpdate"
                      />
         </Grid>
 
@@ -94,15 +87,15 @@
         <Grid Grid.Row="3" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
+                <ColumnDefinition Width="{StaticResource GridPadding}" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <Slider Grid.Row="0" Grid.Column="0"
-                    Height="Auto"
                     ui:ControlHelper.Header="Field of view (degrees)"
                     ui:ControlHelper.Description="Test desc"
                     ui:ControlHelper.PlaceholderText="Placeholder"
-                    Value="{Binding Source={StaticResource controlsData},
+                    Value="{Binding Source={StaticResource ControlsData},
                                     Path=FieldOfView,
                                     Mode=TwoWay
                                     }"
@@ -110,14 +103,16 @@
                     SmallChange="1" LargeChange="5"
                     IsMoveToPointEnabled="True"
                     Ticks="45, 60, 75, 90" TickPlacement="Both" />
-            <TextBox Grid.Row="0" Grid.Column="1"
-                     Width="100"
+            <TextBox Grid.Row="0" Grid.Column="2"
+                     Width="100" Height="Auto"
                      VerticalAlignment="Bottom"
-                     KeyDown="TextBox_KeyEnterUpdate"
-                     Text="{Binding Source={StaticResource controlsData},
+                     Text="{Binding Source={StaticResource ControlsData},
                                     Path=FieldOfView,
                                     Mode=TwoWay,
-                                    UpdateSourceTrigger=LostFocus}" />
+                                    UpdateSourceTrigger=LostFocus
+                                    }"
+                     KeyDown="TextBox_KeyEnterUpdate"
+                     />
         </Grid>
     </Grid>
 </ui:Page>
