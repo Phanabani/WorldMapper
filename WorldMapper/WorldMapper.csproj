@@ -56,7 +56,14 @@
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
         </ApplicationDefinition>
+        <Compile Include="MainWindow.xaml.cs">
+          <DependentUpon>MainWindow.xaml</DependentUpon>
+        </Compile>
         <Compile Include="ManifestResourceLoader.cs" />
+        <Compile Include="Pages\ControlsData.cs" />
+        <Compile Include="Pages\ControlsPage.xaml.cs">
+          <DependentUpon>ControlsPage.xaml</DependentUpon>
+        </Compile>
         <Compile Include="RenderTimer.cs" />
         <Compile Include="MathUtils.cs" />
         <Compile Include="World\Camera.cs" />
@@ -71,6 +78,7 @@
         <Compile Include="Shaders\WireframeShader.cs" />
         <Compile Include="WindowsServices.cs" />
         <Compile Include="World\World.cs" />
+        <Page Include="MainWindow.xaml" />
         <Page Include="OverlayWindow.xaml">
             <Generator>MSBuild:Compile</Generator>
             <SubType>Designer</SubType>
@@ -83,6 +91,8 @@
             <DependentUpon>OverlayWindow.xaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Page Include="Pages\ControlsPage.xaml" />
+        <Page Include="Properties\DesignTimeResources.xaml" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="GameMemoryReader.cs" />

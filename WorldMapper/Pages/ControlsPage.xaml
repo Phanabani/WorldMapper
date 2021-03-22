@@ -1,0 +1,123 @@
+﻿<ui:Page x:Class="WorldMapper.Pages.ControlsPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:WorldMapper.Pages"
+        mc:Ignorable="d"
+        Width="400" Height="400">
+    <ui:Page.Resources>
+        <local:ControlsData x:Key="controlsData" />
+        <local:HexStringConverter x:Key="hexStringConverter" />
+
+        <Thickness x:Key="GridKeyMargin">0 0 8 16</Thickness>
+        <Thickness x:Key="GridValueMargin">0 0 0 16</Thickness>
+        <Thickness x:Key="HeaderMargin">0 16 0 16</Thickness>
+        <Style x:Key="Header" TargetType="Label"
+               BasedOn="{StaticResource {x:Type Label}}">
+            <Setter Property="Margin" Value="{StaticResource HeaderMargin}" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="18" />
+        </Style>
+        <Style TargetType="Label"
+               BasedOn="{StaticResource {x:Type Label}}">
+            <Setter Property="Margin" Value="{StaticResource GridKeyMargin}" />
+        </Style>
+        <Style TargetType="TextBox"
+               BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Margin" Value="{StaticResource GridValueMargin}" />
+        </Style>
+    </ui:Page.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0"
+               Style="{StaticResource Header}">
+            Memory Addresses
+        </Label>
+        <Grid Name="MemoryAddresses" Grid.Row="1" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="8" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBox Grid.Row="0" Grid.Column="0"
+                     ui:ControlHelper.Header="Player position"
+                     KeyDown="TextBox_KeyEnterUpdate"
+                     Text="{Binding Source={StaticResource controlsData},
+                                    Path=PlayerPositionAddress,
+                                    Mode=TwoWay,
+                                    Converter={StaticResource hexStringConverter}
+                           }"
+                     />
+            <Label Grid.Row="1" Grid.Column="0">
+                Camera position
+            </Label>
+            <TextBox Grid.Row="1" Grid.Column="0"
+                     ui:ControlHelper.Header="Camera position"
+                     KeyDown="TextBox_KeyEnterUpdate"
+                     Text="{Binding Source={StaticResource controlsData},
+                                    Path=CameraPositionAddress,
+                                    Mode=TwoWay,
+                                    Converter={StaticResource hexStringConverter}
+                           }"
+                     />
+            <TextBox Grid.Row="1" Grid.Column="2"
+                     ui:ControlHelper.Header="Camera rotation"
+                     KeyDown="TextBox_KeyEnterUpdate"
+                     Text="{Binding Source={StaticResource controlsData},
+                                    Path=CameraRotationAddress,
+                                    Mode=TwoWay,
+                                    Converter={StaticResource hexStringConverter}
+                           }"
+                     />
+        </Grid>
+
+        <Label Grid.Row="2" Grid.Column="0"
+               Style="{StaticResource Header}">
+            Settings
+        </Label>
+        <Grid Grid.Row="3" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Slider Grid.Row="0" Grid.Column="0"
+                    Height="Auto"
+                    ui:ControlHelper.Header="Field of view (degrees)"
+                    ui:ControlHelper.Description="Test desc"
+                    ui:ControlHelper.PlaceholderText="Placeholder"
+                    Value="{Binding Source={StaticResource controlsData},
+                                    Path=FieldOfView,
+                                    Mode=TwoWay
+                                    }"
+                    Minimum="10" Maximum="110"
+                    SmallChange="1" LargeChange="5"
+                    IsMoveToPointEnabled="True"
+                    Ticks="45, 60, 75, 90" TickPlacement="Both" />
+            <TextBox Grid.Row="0" Grid.Column="1"
+                     Width="100"
+                     VerticalAlignment="Bottom"
+                     KeyDown="TextBox_KeyEnterUpdate"
+                     Text="{Binding Source={StaticResource controlsData},
+                                    Path=FieldOfView,
+                                    Mode=TwoWay,
+                                    UpdateSourceTrigger=LostFocus}" />
+        </Grid>
+    </Grid>
+</ui:Page>
