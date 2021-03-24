@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace WorldMapper.Pages
 {
@@ -16,7 +17,7 @@ namespace WorldMapper.Pages
             {
                 if (_fieldOfView == value) return;
                 _fieldOfView = value;
-                OnPropertyChanged(nameof(FieldOfView));
+                OnPropertyChanged();
                 OnFieldOfViewChanged(value);
             }
         }
@@ -32,7 +33,7 @@ namespace WorldMapper.Pages
             handler?.Invoke(this, e);
         }
 
-        protected void OnPropertyChanged(string propertyName)
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
         }
