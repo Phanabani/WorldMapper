@@ -2,6 +2,7 @@
 using System.Windows;
 using SharpGL;
 using SharpGL.WPF;
+using WorldMapper.Pages;
 
 namespace WorldMapper
 {
@@ -10,7 +11,15 @@ namespace WorldMapper
     /// </summary>
     public partial class OverlayWindow
     {
+        public ControlsData ControlsData
+        {
+            get => _controlsData;
+            set => _controlsData = value;
+        }
+
         private readonly Scene _scene;
+
+        private ControlsData _controlsData;
 
         public OverlayWindow()
         {
