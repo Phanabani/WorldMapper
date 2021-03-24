@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -6,6 +7,8 @@ namespace WorldMapper.Pages
 {
     public partial class ControlsPage
     {
+        private OverlayWindow _overlayWindow;
+
         public ControlsPage()
         {
             InitializeComponent();

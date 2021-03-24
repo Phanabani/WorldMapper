@@ -14,7 +14,15 @@ namespace WorldMapper
         public ControlsData ControlsData
         {
             get => _controlsData;
-            set => _controlsData = value;
+            set
+            {
+                if (!(_controlsData is null))
+                    // Unsubscribe from old _controlsData
+                    _controlsData.FieldOfViewChanged -= OnFieldOfViewChanged;
+
+                _controlsData = value;
+                _controlsData.FieldOfViewChanged += OnFieldOfViewChanged;
+            }
         }
 
         private readonly Scene _scene;
@@ -58,6 +66,11 @@ namespace WorldMapper
         private void OpenGLControl_OnOpenGLDraw(object sender, OpenGLRoutedEventArgs args)
         {
             _scene.Draw(args.OpenGL);
+        }
+
+        private void OnFieldOfViewChanged(object sender, FieldOfViewEventArgs e)
+        {
+            _scene.FieldOfView = e.FieldOfView;
         }
     }
 }

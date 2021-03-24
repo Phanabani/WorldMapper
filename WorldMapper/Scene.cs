@@ -12,10 +12,25 @@ namespace WorldMapper
     /// </summary>
     public class Scene
     {
+        public float FieldOfView
+        {
+            get => _fieldOfView;
+            set
+            {
+                _fieldOfView = value;
+                if (_world.Camera is null)
+                    return;
+                _world.Camera.FieldOfView = value;
+                _world.Camera.UpdateProjectionMatrix();
+            }
+        }
+
         private const float PI = (float) Math.PI;
 
         private World.World _world = new World.World();
         private GameMemoryReader _memoryReader;
+
+        private float _fieldOfView = 60;
 
         public Scene()
         {
@@ -135,7 +150,7 @@ namespace WorldMapper
             });
 
             // Add a camera
-            _world.Camera = new Camera(width, height, 45, clipFar: 300f)
+            _world.Camera = new Camera(width, height, FieldOfView, clipFar: 300f)
             {
                 Transform =
                 {
