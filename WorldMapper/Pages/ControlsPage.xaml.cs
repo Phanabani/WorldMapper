@@ -36,6 +36,9 @@ namespace WorldMapper.Pages
 
         private void StartOverlayWindow()
         {
+            if (!(_overlayWindow is null))
+                return;
+
             _overlayWindow = new OverlayWindow()
             {
                 Owner = Application.Current.MainWindow,
@@ -47,6 +50,7 @@ namespace WorldMapper.Pages
         private void StopOverlayWindow()
         {
             _overlayWindow?.Close();
+            _overlayWindow = null;
         }
     }
 }
