@@ -220,56 +220,5 @@ namespace WorldMapper
             // _cameraMatrix.M42 = mat.M43;
             // _cameraMatrix.M43 = -mat.M42;
         }
-
-        private static bool TestMatrixRow(float[] row)
-        {
-            var tol = 0.001f;
-            var c0 = row[0] >= -1f && row[0] < -tol || row[0] > tol && row[0] <= 1f;
-            var c1 = row[1] >= -1f && row[1] < -tol || row[1] > tol && row[1] <= 1f;
-            var c2 = row[2] >= -1f && row[2] < -tol || row[2] > tol && row[2] <= 1f;
-            var c3 = row[3] >= 0f && row[3] < tol || row[3] >= 1f-tol && row[3] <= 1f;
-            return c3 && ((c0 ? 1 : 0) + (c1 ? 1 : 0) + (c2 ? 1 : 0)) >= 2;
-        }
-
-        public void SearchForMatrices(int stopAddress)
-        {
-            const int rowLen = 4 * 4;
-            var row = new float[4];
-            var bytesRead = 1;
-            var buf = new byte[rowLen];
-
-            Console.WriteLine("Starting search");
-            var address = 0L;
-            var consecutive = 0;
-            for (; address < stopAddress; address += buf.Length)
-            {
-                ReadProcessMemory((int)_hProcess, (int) address, buf, buf.Length, ref bytesRead);
-                if (bytesRead == 0)
-                    continue;
-                row[0] = BitConverter.ToSingle(buf, 4 * 0);
-                row[1] = BitConverter.ToSingle(buf, 4 * 1);
-                row[2] = BitConverter.ToSingle(buf, 4 * 2);
-                row[3] = BitConverter.ToSingle(buf, 4 * 3);
-                if (TestMatrixRow(row))
-                    consecutive += 1;
-                else
-                {
-                    if (consecutive == 3)
-                        Console.WriteLine((address - 48).ToString("X"));
-                    consecutive = 0;
-                }
-            }
-            Console.WriteLine($"Done! Read to address {address}");
-        }
-
-        public static void SearchForMatricesMain()
-        {
-            var reader = new GameMemoryReader
-            {
-                UpAxis = 'z',
-                ProcessName = "pcsx2",
-            };
-            reader.SearchForMatrices(0x7fff_ffff);
-        }
     }
 }
