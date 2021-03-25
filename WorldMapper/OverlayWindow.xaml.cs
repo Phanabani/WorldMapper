@@ -22,6 +22,10 @@ namespace WorldMapper
 
                 _controlsData = value;
                 _controlsData.FieldOfViewChanged += OnFieldOfViewChanged;
+
+                if (_scene is null)
+                    return;
+                _scene.FieldOfView = _controlsData.FieldOfView;
             }
         }
 
