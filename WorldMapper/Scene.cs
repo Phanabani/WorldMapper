@@ -25,6 +25,12 @@ namespace WorldMapper
             }
         }
 
+        public int CameraMatrixAddress
+        {
+            get => _memoryReader.CameraMatrixAddress;
+            set => _memoryReader.CameraMatrixAddress = value;
+        }
+
         private const float PI = (float) Math.PI;
 
         private World.World _world = new World.World();
@@ -41,8 +47,10 @@ namespace WorldMapper
                 CharacterPosAddress = 0x20189EA0,
                 CameraPosAddress = 0x201BA500,
                 CameraRotAddress = 0x201BA510,
-                CameraRotMatrixAddress = 0x201BA730,
-                CameraMatrixAddress = 0x201BB270
+                // CameraMatrixAddress = 0x201BB270
+                CameraMatrixAddress = 0x201BA3C0
+                // CameraMatrixAddress = 0x201BA730
+                // CameraMatrixAddress = 0x201BEC80
             };
         }
 
@@ -108,43 +116,43 @@ namespace WorldMapper
                     }
                 },
 
-                // Ratchet's ship
-                new WireframeMeshObject(gl, verts)
-                {
-                    Shader = wireframe,
-                    Transform = new Transform
-                    {
-                        Position = new Vector3(510, 120, -312.5f)
-                    }
-                },
-
                 // Maktar center circle near light bridge
                 new WireframeMeshObject(gl, verts)
                 {
                     Shader = wireframe,
                     Transform = new Transform
                     {
-                        Position = new Vector3(500, 110, -358)
+                        Position = new Vector3(500f, 110.167f, -358f)
                     }
                 },
 
-                // Maktar circle thing right
+                // Maktar center circle near ramp
                 new WireframeMeshObject(gl, verts)
                 {
                     Shader = wireframe,
                     Transform = new Transform
                     {
-                        Position = new Vector3(508, 110, -352)
+                        Position = new Vector3(493.469f, 110.168f, -345.266f)
                     }
                 },
 
-                // Maktar circle thing left
+                // Maktar light nub left bottom
                 new WireframeMeshObject(gl, verts)
                 {
                     Shader = wireframe,
                     Transform = new Transform
                     {
-                        Position = new Vector3(492f, 110, -352)
+                        Position = new Vector3(496.683f, 110.687f, -336.412f)
+                    }
+                },
+
+                // Maktar light nub right top
+                new WireframeMeshObject(gl, verts)
+                {
+                    Shader = wireframe,
+                    Transform = new Transform
+                    {
+                        Position = new Vector3(504.186f, 114.774f, -329.013f)
                     }
                 },
             });
@@ -182,8 +190,8 @@ namespace WorldMapper
             trans.Position = _memoryReader.CameraPos;
 
             var euler = MatrixToEuler(trans.Matrix) * 180f / PI;
-            gl.DrawText(20, 50, 1f, 0f, 0f, "Courier New", 24f, trans.Position.ToString("F03"));
-            gl.DrawText(20, 20, 1f, 0f, 0f, "Courier New", 24f, euler.ToString("F03"));
+            gl.DrawText(20, 80, 1f, 0f, 0f, "Courier New", 24f, trans.Position.ToString("F03"));
+            gl.DrawText(20, 50, 1f, 0f, 0f, "Courier New", 24f, euler.ToString("F03"));
             _world.Draw(gl);
         }
     }

@@ -49,19 +49,13 @@ namespace WorldMapper.World
         public void ForceUpdateMatrix()
         {
             Matrix4x4 trans, rot, scale;
+            trans = Matrix4x4.CreateTranslation(-_position);
+            rot = Matrix4x4.CreateFromQuaternion(Quaternion.Inverse(_rotation));
+            scale = Matrix4x4.CreateScale(_scale);
             if (_isCamera)
-            {
-                trans = Matrix4x4.CreateTranslation(-_position);
-                rot = Matrix4x4.CreateFromQuaternion(Quaternion.Inverse(_rotation));
-                scale = Matrix4x4.CreateScale(_scale);
-                _matrix = trans * rot * scale;
-            }
+                Matrix4x4.Invert(trans * rot, out _matrix);
             else
-            {
-                trans = Matrix4x4.CreateTranslation(_position);
-                rot = Matrix4x4.CreateFromQuaternion(_rotation);
-                _matrix = trans * rot;  // scaling is not supported for cameras
-            }
+                _matrix = trans * rot * scale;
             _dirty = false;
         }
 

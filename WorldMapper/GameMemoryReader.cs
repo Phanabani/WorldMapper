@@ -211,8 +211,15 @@ namespace WorldMapper
             // _cameraRot = Quaternion.CreateFromRotationMatrix(_cameraMatrix);
 
             var q = Quaternion.CreateFromRotationMatrix(camMat);
-            var fix = Quaternion.CreateFromYawPitchRoll(-PI/2, 0, 0);
-            _cameraRot = fix * new Quaternion(-q.Y, q.Z, -q.X, q.W);
+            // var fix = Quaternion.CreateFromYawPitchRoll(-PI/2, 0, 0);
+            var fix = Quaternion.CreateFromYawPitchRoll(0, -PI/2, 0);
+            // _cameraRot = fix * new Quaternion(-q.Y, q.Z, -q.X, q.W);
+            _cameraRot = fix * new Quaternion(
+                q.X,
+                -q.Z,
+                q.Y,
+                q.W
+            );
 
             // MatrixSwapYawRoll(ref _cameraMatrix);
             // _cameraMatrix = MatrixZUpToYUp(mat);
